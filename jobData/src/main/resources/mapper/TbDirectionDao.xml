@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.job.app.dao.TbDirectionDao">
+
+    <resultMap type="com.job.app.entity.TbDirection" id="TbDirectionMap">
+        <result property="diId" column="di_id" jdbcType="INTEGER"/>
+        <result property="diName" column="di_name" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="modifyTime" column="modify_time" jdbcType="VARCHAR"/>
+        <result property="deleted" column="deleted" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="diId" useGeneratedKeys="true">
+        insert into ceap.tb_direction(di_name, create_time, modify_time, deleted)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.diName}, #{entity.createTime}, #{entity.modifyTime}, #{entity.deleted})
+        </foreach>
+    </insert>
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="diId" useGeneratedKeys="true">
+        insert into ceap.tb_direction(di_name, create_time, modify_time, deleted)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.diName}, #{entity.createTime}, #{entity.modifyTime}, #{entity.deleted})
+        </foreach>
+        on duplicate key update
+         di_name = values(di_name) , create_time = values(create_time) , modify_time = values(modify_time) , deleted = values(deleted)     </insert>
+
+</mapper>
+

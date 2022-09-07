@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.job.app.dao.TbRegionDao">
+
+    <resultMap type="com.job.app.entity.TbRegion" id="TbRegionMap">
+        <result property="reId" column="re_id" jdbcType="VARCHAR"/>
+        <result property="reName" column="re_name" jdbcType="VARCHAR"/>
+        <result property="reShortname" column="re_shortname" jdbcType="VARCHAR"/>
+        <result property="reCode" column="re_code" jdbcType="INTEGER"/>
+        <result property="reLevel" column="re_level" jdbcType="VARCHAR"/>
+        <result property="reParentId" column="re_parent_id" jdbcType="VARCHAR"/>
+        <association property="tbArea" javaType="com.job.app.entity.TbArea">
+            <id property="arId" column="ar_id"/>
+            <result property="arName" column="ar_name"/>
+        </association>
+    </resultMap>
+
+    <insert id="save">
+        insert into tb_region(re_name, re_shortname, re_code, re_level, re_parent_id, ar_id)
+        VALUES (#{reName}, #{reShortname}, #{reCode}, #{reLevel}, #{reParentId}, #{tbArea.arId})
+    </insert>
+
+    <update id="update">
+        update tb_region
+        set re_name      = #{reName},
+            re_shortname= #{reShortname},
+            re_code      = #{reCode},
+            re_level     = #{reLevel},
+            re_parent_id = #{reParentId},
+            ar_id        = #{tbArea.arId}
+
+        where re_id = #{reId}
+    </update>
+
+    <select id="listPage" resultMap="TbRegionMap">
+        select * from tb_region tr left join tb_area ta on tr.ar_id = ta.ar_id
+        <where>
+            <if test="reName != null and '' != reName">
+                tr.re_name like '%${reName}%'
+            </if>
+        </where>
+        limit ${page}, ${size}
+    </select>
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) from tb_region
+        <where>
+            <if test="reName != null and '' != reName">
+                re_name like '%${reName}%'
+            </if>
+        </where>
+    </select>
+    <select id="getShortname" resultType="java.lang.String">
+        select re_shortname
+        from tb_region
+        GROUP BY re_shortname
+    </select>
+    <select id="getName" resultMap="TbRegionMap">
+        select re_id, re_name, re_shortname
+        from tb_region
+        where re_shortname = #{reShortname}
+    </select>
+
+
+</mapper>
+

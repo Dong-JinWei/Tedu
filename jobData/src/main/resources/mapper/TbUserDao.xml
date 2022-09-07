@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.job.app.dao.TbUserDao">
+
+    <resultMap type="com.job.app.entity.TbUser" id="TbUserMap">
+        <result property="uId" column="u_id" jdbcType="INTEGER"/>
+        <result property="uName" column="u_name" jdbcType="VARCHAR"/>
+        <result property="uEmail" column="u_email" jdbcType="VARCHAR"/>
+        <result property="uPassword" column="u_password" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="modifyTime" column="modify_time" jdbcType="VARCHAR"/>
+        <result property="deleted" column="deleted" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="uId" useGeneratedKeys="true">
+        insert into ceap.tb_user(u_name, u_email, u_password, create_time, modify_time, deleted)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.uName}, #{entity.uEmail}, #{entity.uPassword}, #{entity.createTime}, #{entity.modifyTime}, #{entity.deleted})
+        </foreach>
+    </insert>
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="uId" useGeneratedKeys="true">
+        insert into ceap.tb_user(u_name, u_email, u_password, create_time, modify_time, deleted)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.uName}, #{entity.uEmail}, #{entity.uPassword}, #{entity.createTime}, #{entity.modifyTime}, #{entity.deleted})
+        </foreach>
+        on duplicate key update
+         u_name = values(u_name) , u_email = values(u_email) , u_password = values(u_password) , create_time = values(create_time) , modify_time = values(modify_time) , deleted = values(deleted)     </insert>
+
+</mapper>
+

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.job.app.dao.TbClazzDao">
+
+    <resultMap type="com.job.app.entity.TbClazz" id="TbClazzMap">
+        <result property="clId" column="cl_id" jdbcType="INTEGER"/>
+        <result property="clName" column="cl_name" jdbcType="VARCHAR"/>
+        <result property="clNum" column="cl_num" jdbcType="VARCHAR"/>
+        <result property="clGrade" column="cl_grade" jdbcType="VARCHAR"/>
+        <result property="spId" column="sp_id" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="modifyTime" column="modify_time" jdbcType="VARCHAR"/>
+        <result property="deleted" column="deleted" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="clId" useGeneratedKeys="true">
+        insert into ceap.tb_clazz(cl_name, cl_num, cl_grade, sp_id, create_time, modify_time, deleted)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.clName}, #{entity.clNum}, #{entity.clGrade}, #{entity.spId}, #{entity.createTime}, #{entity.modifyTime}, #{entity.deleted})
+        </foreach>
+    </insert>
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="clId" useGeneratedKeys="true">
+        insert into ceap.tb_clazz(cl_name, cl_num, cl_grade, sp_id, create_time, modify_time, deleted)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.clName}, #{entity.clNum}, #{entity.clGrade}, #{entity.spId}, #{entity.createTime}, #{entity.modifyTime}, #{entity.deleted})
+        </foreach>
+        on duplicate key update
+         cl_name = values(cl_name) , cl_num = values(cl_num) , cl_grade = values(cl_grade) , sp_id = values(sp_id) , create_time = values(create_time) , modify_time = values(modify_time) , deleted = values(deleted)     </insert>
+
+</mapper>
+

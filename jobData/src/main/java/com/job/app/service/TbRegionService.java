@@ -3,6 +3,8 @@ package com.job.app.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.job.app.entity.TbRegion;
 
+import java.util.List;
+
 /**
  * (TbRegion)表服务接口
  *
@@ -11,5 +13,16 @@ import com.job.app.entity.TbRegion;
  */
 public interface TbRegionService extends IService<TbRegion> {
 
+    List<TbRegion> listPage(int page, int size, String reName);
+
+    int count(String reName);
+
+    boolean save(TbRegion tbRegion);
+
+    Boolean update(TbRegion tbRegion);
+
+    List<String> getShortname();
+
+    List<TbRegion> getName(String reShortname);
 }
 

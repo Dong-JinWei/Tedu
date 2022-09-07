@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.job.app.dao.TbDeptDao">
+
+    <resultMap type="com.job.app.entity.TbDept" id="TbDeptMap">
+        <result property="deId" column="de_id" jdbcType="INTEGER"/>
+        <result property="deName" column="de_name" jdbcType="VARCHAR"/>
+        <result property="deNum" column="de_num" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="modifyTime" column="modify_time" jdbcType="VARCHAR"/>
+        <result property="deleted" column="deleted" jdbcType="INTEGER"/>
+        <association property="tbCollege" javaType="com.job.app.entity.TbCollege">
+            <id property="coId" column="co_id"/>
+            <id property="coName" column="co_name"/>
+        </association>
+    </resultMap>
+
+    <insert id="save">
+        insert into tb_dept(de_name, de_num, co_id, create_time, modify_time)
+        VALUES (#{deName}, #{deNum}, #{tbCollege.coId}, now(), now())
+    </insert>
+    <update id="update">
+        update tb_dept
+        set de_name     = #{deName},
+            de_num      = #{deNum},
+            co_id       = #{tbCollege.coId},
+            modify_time = now()
+        where de_id = #{deId}
+    </update>
+
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) from tb_dept td left join tb_college tc on td.co_id = tc.co_id
+        <where>
+            <if test="deName != null and deName != ''">
+                td.de_name like '%${deName}%'
+            </if>
+            and td.deleted = 0
+        </where>
+    </select>
+
+    <select id="listPage" resultMap="TbDeptMap">
+        select * from tb_dept td left join tb_college tc on td.co_id = tc.co_id
+        <where>
+            <if test="deName != null and deName != ''">
+                td.de_name like '%${deName}%'
+            </if>
+            and td.deleted = 0
+        </where>
+        limit #{page}, #{size}
+    </select>
+
+</mapper>
+

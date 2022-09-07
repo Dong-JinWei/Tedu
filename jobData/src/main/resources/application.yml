@@ -28,14 +28,14 @@ mybatis-plus:
   mapper-locations: classpath:mapper/*.xml
   global-config:
     db-config:
-      logic-delete-field: deleted
-      logic-delete-value: 1
-      logic-not-delete-value: 0
+      logic-delete-field: flag # 全局逻辑删除的实体字段名(since 3.3.0,配置后可以忽略不配置步骤2)
+      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
   configuration:
     map-underscore-to-camel-case: true
 logging:
   level:
     com:
-      book:
+      job:
         app:
           dao: debug  # 控制台打印sql语句

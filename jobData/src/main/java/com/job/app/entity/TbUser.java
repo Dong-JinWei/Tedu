@@ -31,7 +31,7 @@ public class TbUser implements Serializable {
     @TableField(fill = FieldFill.INSERT)
     private String createTime;
     //修改时间
-    @TableField(fill = FieldFill.UPDATE)
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private String modifyTime;
     //删除标记
     @TableLogic

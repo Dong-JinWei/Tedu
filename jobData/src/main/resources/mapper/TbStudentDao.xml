@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.job.app.dao.TbStudentDao">
+
+    <resultMap type="com.job.app.entity.TbStudent" id="TbStudentMap">
+        <result property="sId" column="s_id" jdbcType="INTEGER"/>
+        <result property="sName" column="s_name" jdbcType="VARCHAR"/>
+        <result property="sNum" column="s_num" jdbcType="VARCHAR"/>
+        <result property="sSex" column="s_sex" jdbcType="VARCHAR"/>
+        <result property="sBirthday" column="s_birthday" jdbcType="VARCHAR"/>
+        <result property="sPhoto" column="s_photo" jdbcType="VARCHAR"/>
+        <result property="clId" column="cl_id" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="modifyTime" column="modify_time" jdbcType="VARCHAR"/>
+        <result property="deleted" column="deleted" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="sId" useGeneratedKeys="true">
+        insert into ceap.tb_student(s_name, s_num, s_sex, s_birthday, s_photo, cl_id, create_time, modify_time, deleted)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.sName}, #{entity.sNum}, #{entity.sSex}, #{entity.sBirthday}, #{entity.sPhoto}, #{entity.clId}, #{entity.createTime}, #{entity.modifyTime}, #{entity.deleted})
+        </foreach>
+    </insert>
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="sId" useGeneratedKeys="true">
+        insert into ceap.tb_student(s_name, s_num, s_sex, s_birthday, s_photo, cl_id, create_time, modify_time, deleted)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.sName}, #{entity.sNum}, #{entity.sSex}, #{entity.sBirthday}, #{entity.sPhoto}, #{entity.clId}, #{entity.createTime}, #{entity.modifyTime}, #{entity.deleted})
+        </foreach>
+        on duplicate key update
+         s_name = values(s_name) , s_num = values(s_num) , s_sex = values(s_sex) , s_birthday = values(s_birthday) , s_photo = values(s_photo) , cl_id = values(cl_id) , create_time = values(create_time) , modify_time = values(modify_time) , deleted = values(deleted)     </insert>
+
+</mapper>
+

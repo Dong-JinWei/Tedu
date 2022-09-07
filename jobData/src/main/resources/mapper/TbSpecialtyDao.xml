@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.job.app.dao.TbSpecialtyDao">
+
+    <resultMap type="com.job.app.entity.TbSpecialty" id="TbSpecialtyMap">
+        <result property="spId" column="sp_id" jdbcType="INTEGER"/>
+        <result property="spName" column="sp_name" jdbcType="VARCHAR"/>
+        <result property="spNum" column="sp_num" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="modifyTime" column="modify_time" jdbcType="VARCHAR"/>
+        <result property="deleted" column="deleted" jdbcType="INTEGER"/>
+        <association property="tbDept" javaType="com.job.app.entity.TbDept">
+            <id property="deId" column="de_id"/>
+            <result property="deName" column="de_name"/>
+        </association>
+    </resultMap>
+
+    <insert id="save">
+        insert into tb_specialty(sp_name, sp_num, de_id, create_time, modify_time)
+        VALUES (#{spName}, #{spNum}, #{tbDept.deId}, now(), now())
+    </insert>
+
+    <update id="update">
+        update tb_specialty
+        set sp_name     = #{spName},
+            sp_num      = #{spNum},
+            de_id       = #{tbDept.deId},
+            modify_time = now()
+        where sp_id = #{spId}
+    </update>
+
+    <select id="listPage" resultMap="TbSpecialtyMap">
+        select * from tb_specialty ts left join tb_dept td on ts.de_id = td.de_id
+        <where>
+            <if test="spName != null and spName != ''">
+                ts.sp_name like '%${spName}%'
+            </if>
+            and ts.deleted = 0
+        </where>
+        limit ${page}, ${size}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) from tb_specialty ts left join tb_dept td on ts.de_id = td.de_id
+        <where>
+            <if test="spName != null and spName != ''">
+                ts.sp_name like '%${spName}%'
+            </if>
+            and ts.deleted = 0
+        </where>
+    </select>
+
+
+</mapper>
+

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.job.app.entity.TbArea;
 import com.job.app.entity.TbCollege;
+import com.job.app.entity.TbCompany;
 import com.job.app.service.TbCollegeService;
 import com.job.app.tools.CommonResult;
 import io.swagger.annotations.Api;
@@ -11,9 +12,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.poi.ss.formula.functions.T;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -27,6 +26,7 @@ import java.util.HashMap;
 @RestController
 @RequestMapping("tbCollege")
 @Api(tags = "院校控制器")
+@CrossOrigin
 public class TbCollegeController {
     /**
      * 服务对象
@@ -57,6 +57,24 @@ public class TbCollegeController {
         map.put("total", tbCollegeService.count(queryWrapper));
         map.put("rows", tbCollegeService.page(new Page<TbCollege>(page, size), queryWrapper).getRecords());
         return CommonResult.success(map);
+    }
+
+    @PostMapping("/save")
+    @ApiOperation("插入数据")
+    public CommonResult save(@RequestBody TbCollege tbCollege){
+        return CommonResult.success(tbCollegeService.save(tbCollege));
+    }
+
+    @PostMapping("/update")
+    @ApiOperation("修改数据")
+    public CommonResult update(@RequestBody TbCollege tbCollege){
+        return CommonResult.success(tbCollegeService.updateById(tbCollege));
+    }
+
+    @PostMapping("/remove")
+    @ApiOperation("删除数据")
+    public CommonResult remove(Integer coId){
+        return CommonResult.success(tbCollegeService.removeById(coId));
     }
 }
 

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.job.app.dao.TbCompanyDao">
+
+    <resultMap type="com.job.app.entity.TbCompany" id="TbCompanyMap">
+        <result property="cpId" column="cp_id" jdbcType="INTEGER"/>
+        <result property="cpName" column="cp_name" jdbcType="VARCHAR"/>
+        <result property="cpDesc" column="cp_desc" jdbcType="VARCHAR"/>
+        <result property="cpAddr" column="cp_addr" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="modifyTime" column="modify_time" jdbcType="VARCHAR"/>
+        <result property="deleted" column="deleted" jdbcType="INTEGER"/>
+        <association property="tbRegion" javaType="com.job.app.entity.TbRegion">
+            <id property="reId" column="re_id"/>
+            <result property="reName" column="re_name"/>
+        </association>
+    </resultMap>
+
+    <insert id="save">
+        insert into tb_company(cp_name, cp_desc, re_id, cp_addr, create_time, modify_time)
+        VALUES (#{cpName}, #{cpDesc}, #{tbRegion.reId}, #{cpAddr}, now(), now())
+    </insert>
+    <update id="update">
+        update tb_company
+        set cp_name     = #{cpName},
+            cp_desc     = #{cpDesc},
+            re_id       = #{tbRegion.reId},
+            cp_addr     = #{cpAddr},
+            modify_time = now()
+        where cp_id = #{cpId}
+    </update>
+
+    <select id="listPage" resultMap="TbCompanyMap">
+        select * from tb_company tc left join tb_region tr on tc.re_id = tr.re_id
+        <where>
+            <if test="cpName != null and cpName != ''">
+                tc.cp_name like '%${cpName}%'
+            </if>
+            and tc.deleted = 0
+        </where>
+        limit #{page}, #{size}
+    </select>
+    <select id="count" resultType="java.lang.Integer">
+        select count(*) from tb_company tc left join tb_region tr on tc.re_id = tr.re_id
+        <where>
+            <if test="cpName != null and cpName != ''">
+                tc.cp_name like '%${cpName}%'
+            </if>
+            and tc.deleted = 0
+        </where>
+    </select>
+
+</mapper>
+

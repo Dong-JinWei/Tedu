@@ -10,12 +10,15 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.apache.poi.ss.formula.functions.T;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.sql.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * (TbRegion)表控制层
@@ -26,6 +29,7 @@ import java.util.HashMap;
 @RestController
 @RequestMapping("tbRegion")
 @Api(tags = "行政控制器")
+@CrossOrigin
 public class TbRegionController {
     /**
      * 服务对象
@@ -47,14 +51,48 @@ public class TbRegionController {
     )
     @GetMapping("/listPage")
     public CommonResult listPage(int page, int size, String reName) {
-        QueryWrapper<TbRegion> queryWrapper = new QueryWrapper<>();
-        if (!"".equals(reName) && reName != null) {
-            queryWrapper.like("re_name", reName);
-        }
         HashMap<String, Object> map = new HashMap<>();
-        map.put("total", tbRegionService.count(queryWrapper));
-        map.put("rows", tbRegionService.page(new Page<TbRegion>(page, size), queryWrapper).getRecords());
+        map.put("total", tbRegionService.count(reName));
+        map.put("rows", tbRegionService.listPage(page, size, reName));
         return CommonResult.success(map);
+    }
+
+    @PostMapping("/save")
+    @ApiOperation("插入数据")
+    public CommonResult save(@RequestBody TbRegion tbRegion){
+        return CommonResult.success(tbRegionService.save(tbRegion));
+    }
+
+    @PostMapping("/update")
+    @ApiOperation("修改数据")
+    public CommonResult update(@RequestBody TbRegion tbRegion){
+        return CommonResult.success(tbRegionService.update(tbRegion));
+    }
+
+    @GetMapping("/getRegion")
+    @ApiOperation("级联查询")
+    public CommonResult getRegion(){
+
+        ArrayList<Map<String, Object>> maps = new ArrayList<>();
+
+        List<String> shortnames = tbRegionService.getShortname();
+        for (String shortname : shortnames) {
+            HashMap<String, Object> map = new HashMap<>();
+            // map.put("value", shortname);
+            map.put("label", shortname);
+            List<TbRegion> names = tbRegionService.getName(shortname);
+            ArrayList<Map<String, Object>> childrenList = new ArrayList<>();
+            for (TbRegion name : names) {
+                HashMap<String, Object> children = new HashMap<>();
+                children.put("value", name.getReId());
+                children.put("label", name.getReName());
+                childrenList.add(children);
+            }
+            map.put("children", childrenList);
+            maps.add(map);
+        }
+
+        return CommonResult.success(maps);
     }
 
 }

@@ -2,6 +2,7 @@ package com.job.app.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.job.app.entity.TbDept;
 import com.job.app.entity.TbDirection;
 import com.job.app.entity.TbSpecialty;
 import com.job.app.service.TbSpecialtyService;
@@ -10,9 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -26,6 +25,7 @@ import java.util.HashMap;
 @RestController
 @RequestMapping("tbSpecialty")
 @Api(tags = "专业控制器")
+@CrossOrigin
 public class TbSpecialtyController {
     /**
      * 服务对象
@@ -48,15 +48,31 @@ public class TbSpecialtyController {
     )
     @GetMapping("/listPage")
     public CommonResult listPage(int page, int size, String spName) {
-        QueryWrapper<TbSpecialty> queryWrapper = new QueryWrapper<>();
-        if (!"".equals(spName) && spName != null) {
-            queryWrapper.like("di_name", spName);
-        }
         HashMap<String, Object> map = new HashMap<>();
-        map.put("total", tbSpecialtyService.count(queryWrapper));
-        map.put("rows", tbSpecialtyService.page(new Page<TbSpecialty>(page, size), queryWrapper).getRecords());
+        map.put("total", tbSpecialtyService.count(spName));
+        map.put("rows", tbSpecialtyService.listPage(page, size, spName));
         return CommonResult.success(map);
     }
+
+    @PostMapping("/save")
+    @ApiOperation("插入数据")
+    public CommonResult save(@RequestBody TbSpecialty tbSpecialty){
+        return CommonResult.success(tbSpecialtyService.save(tbSpecialty));
+    }
+
+    @PostMapping("/update")
+    @ApiOperation("修改数据")
+    public CommonResult update(@RequestBody TbSpecialty tbSpecialty){
+        return CommonResult.success(tbSpecialtyService.update(tbSpecialty));
+    }
+
+    @PostMapping("/remove")
+    @ApiOperation("删除数据")
+    public CommonResult remove(Integer spId){
+        return CommonResult.success(tbSpecialtyService.removeById(spId));
+    }
+
+
 
 }
 

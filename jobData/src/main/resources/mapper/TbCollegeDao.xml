@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.job.app.dao.TbCollegeDao">
+
+    <resultMap type="com.job.app.entity.TbCollege" id="TbCollegeMap">
+        <result property="coId" column="co_id" jdbcType="INTEGER"/>
+        <result property="coName" column="co_name" jdbcType="VARCHAR"/>
+        <result property="coAddr" column="co_addr" jdbcType="VARCHAR"/>
+        <result property="coNum" column="co_num" jdbcType="VARCHAR"/>
+        <result property="coEmail" column="co_email" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="modifyTime" column="modify_time" jdbcType="VARCHAR"/>
+        <result property="deleted" column="deleted" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="coId" useGeneratedKeys="true">
+        insert into ceap.tb_college(co_name, co_addr, co_num, co_email, create_time, modify_time, deleted)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.coName}, #{entity.coAddr}, #{entity.coNum}, #{entity.coEmail}, #{entity.createTime}, #{entity.modifyTime}, #{entity.deleted})
+        </foreach>
+    </insert>
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="coId" useGeneratedKeys="true">
+        insert into ceap.tb_college(co_name, co_addr, co_num, co_email, create_time, modify_time, deleted)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.coName}, #{entity.coAddr}, #{entity.coNum}, #{entity.coEmail}, #{entity.createTime}, #{entity.modifyTime}, #{entity.deleted})
+        </foreach>
+        on duplicate key update
+         co_name = values(co_name) , co_addr = values(co_addr) , co_num = values(co_num) , co_email = values(co_email) , create_time = values(create_time) , modify_time = values(modify_time) , deleted = values(deleted)     </insert>
+
+</mapper>
+

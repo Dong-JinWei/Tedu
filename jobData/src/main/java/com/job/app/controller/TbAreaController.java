@@ -9,13 +9,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * (TbArea)表控制层
@@ -26,6 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("tbArea")
 @Api(tags = "区域控制器")
+@CrossOrigin
 public class TbAreaController {
     /**
      * 服务对象
@@ -53,8 +51,14 @@ public class TbAreaController {
         }
         HashMap<String, Object> map = new HashMap<>();
         map.put("total", tbAreaService.count(queryWrapper));
-        map.put("rows", tbAreaService.page(new Page<TbArea>(page, size), queryWrapper).getRecords());
+        map.put("rows", tbAreaService.page(new Page(page, size), queryWrapper).getRecords());
         return CommonResult.success(map);
+    }
+
+    @ApiOperation(value = "添加地区数据")
+    @PostMapping("/save")
+    public CommonResult save(@RequestBody TbArea tbArea) {
+        return CommonResult.success(tbAreaService.save(tbArea));
     }
 }
 

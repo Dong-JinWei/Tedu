@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.job.app.dao.TbAreaDao">
+
+    <resultMap type="com.job.app.entity.TbArea" id="TbAreaMap">
+        <result property="arId" column="ar_id" jdbcType="INTEGER"/>
+        <result property="arName" column="ar_name" jdbcType="VARCHAR"/>
+        <result property="arDesc" column="ar_desc" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="arId" useGeneratedKeys="true">
+        insert into ceap.tb_area(ar_name, ar_desc)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.arName}, #{entity.arDesc})
+        </foreach>
+    </insert>
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="arId" useGeneratedKeys="true">
+        insert into ceap.tb_area(ar_name, ar_desc)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.arName}, #{entity.arDesc})
+        </foreach>
+        on duplicate key update
+         ar_name = values(ar_name) , ar_desc = values(ar_desc)     </insert>
+
+</mapper>
+

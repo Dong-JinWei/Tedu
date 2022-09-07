@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.job.app.dao.TbJobDao">
+
+    <resultMap type="com.job.app.entity.TbJob" id="TbJobMap">
+        <result property="jId" column="j_id" jdbcType="INTEGER"/>
+        <result property="sId" column="s_id" jdbcType="INTEGER"/>
+        <result property="cpId" column="cp_id" jdbcType="INTEGER"/>
+        <result property="jSalary" column="j_salary" jdbcType="VARCHAR"/>
+        <result property="diId" column="di_id" jdbcType="INTEGER"/>
+        <result property="proId" column="pro_id" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+        <result property="modifyTime" column="modify_time" jdbcType="VARCHAR"/>
+        <result property="deleted" column="deleted" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="jId" useGeneratedKeys="true">
+        insert into ceap.tb_job(s_id, cp_id, j_salary, di_id, pro_id, create_time, modify_time, deleted)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.sId}, #{entity.cpId}, #{entity.jSalary}, #{entity.diId}, #{entity.proId}, #{entity.createTime}, #{entity.modifyTime}, #{entity.deleted})
+        </foreach>
+    </insert>
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="jId" useGeneratedKeys="true">
+        insert into ceap.tb_job(s_id, cp_id, j_salary, di_id, pro_id, create_time, modify_time, deleted)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.sId}, #{entity.cpId}, #{entity.jSalary}, #{entity.diId}, #{entity.proId}, #{entity.createTime}, #{entity.modifyTime}, #{entity.deleted})
+        </foreach>
+        on duplicate key update
+         s_id = values(s_id) , cp_id = values(cp_id) , j_salary = values(j_salary) , di_id = values(di_id) , pro_id = values(pro_id) , create_time = values(create_time) , modify_time = values(modify_time) , deleted = values(deleted)     </insert>
+
+</mapper>
+
