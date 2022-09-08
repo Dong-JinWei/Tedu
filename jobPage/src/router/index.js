@@ -9,6 +9,12 @@ import Company from '../components/Company.vue'
 import College from '../components/College.vue'
 import Dept from '../components/Dept.vue'
 import Specialty from '../components/Specialty.vue'
+import Clazz from '../components/Clazz.vue'
+import Student from '../components/Student.vue'
+import User from '../components/User.vue'
+import Direction from '../components/Direction.vue'
+import Protocol from '../components/Protocol.vue'
+import Job from '../components/Job.vue'
 
 
 Vue.use(Router)
@@ -40,6 +46,24 @@ export default new Router({
       }, {
         path: '/specialty',
         component: Specialty
+      },{
+        path: '/clazz',
+        component: Clazz
+      },{
+        path: '/student',
+        component: Student
+      },{
+        path: '/user',
+        component: User
+      },{
+        path: '/direction',
+        component: Direction
+      },{
+        path: '/protocol',
+        component: Protocol
+      },{
+        path: '/job',
+        component: Job
       }]
     }
   ]

@@ -2,6 +2,7 @@ package com.job.app.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.job.app.entity.TbCollege;
 import com.job.app.entity.TbDirection;
 import com.job.app.entity.TbUser;
 import com.job.app.service.TbUserService;
@@ -10,10 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -58,6 +56,24 @@ public class TbUserController {
         map.put("total", tbUserService.count(queryWrapper));
         map.put("rows", tbUserService.page(new Page<TbUser>(page, size), queryWrapper).getRecords());
         return CommonResult.success(map);
+    }
+
+    @PostMapping("/save")
+    @ApiOperation("插入数据")
+    public CommonResult save(@RequestBody TbUser tbUser){
+        return CommonResult.success(tbUserService.save(tbUser));
+    }
+
+    @PostMapping("/update")
+    @ApiOperation("修改数据")
+    public CommonResult update(@RequestBody TbUser tbUser){
+        return CommonResult.success(tbUserService.updateById(tbUser));
+    }
+
+    @PostMapping("/remove")
+    @ApiOperation("删除数据")
+    public CommonResult remove(Integer uId){
+        return CommonResult.success(tbUserService.removeById(uId));
     }
 
 }

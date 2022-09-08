@@ -7,13 +7,13 @@
         <el-breadcrumb>
           <el-breadcrumb-item :to="{path: '/welcome'}">首页</el-breadcrumb-item>
           <el-breadcrumb-item>学生信息管理</el-breadcrumb-item>
-          <el-breadcrumb-item>专业管理</el-breadcrumb-item>
+          <el-breadcrumb-item>班级管理</el-breadcrumb-item>
         </el-breadcrumb>
       </el-row>
 
       <el-row :gutter="10">
         <el-col :span="6">
-          <el-input placeholder="根据专业名称称查询" prefix-icon="el-icon-search" v-model="pager.spName" @change="listPage()"
+          <el-input placeholder="输入班级名称搜索" prefix-icon="el-icon-search" v-model="pager.clName" @change="listPage()"
             clearable>
           </el-input>
         </el-col>
@@ -28,11 +28,15 @@
 
     <el-card style="margin-top: 20px;">
       <el-table :data="tableData" stripe style="width: 100%" highlight-current-row @current-change="selectOneRow">
-        <el-table-column prop="spId" label="专业ID" width="70px">
+        <el-table-column prop="clId" label="班级ID" width="70px">
         </el-table-column>
-        <el-table-column prop="spName" label="专业名称">
+        <el-table-column prop="clName" label="班级名称">
         </el-table-column>
-        <el-table-column prop="spNum" label="专业编号">
+        <el-table-column prop="clNum" label="班级编号">
+        </el-table-column>
+        <el-table-column prop="clGrade" label="班级年级">
+        </el-table-column>
+        <el-table-column prop="tbSpecialty.spName" label="班级专业">
         </el-table-column>
         <el-table-column prop="tbDept.deName" label="所属院系">
         </el-table-column>
@@ -46,28 +50,34 @@
 
     </el-card>
     <!-- 添加对话框 -->
-    <el-dialog title="添加专业" :visible.sync="addFlag" destroy-on-close>
+    <el-dialog title="添加班级" :visible.sync="addFlag" destroy-on-close>
       <el-form>
         <el-row :gutter="10">
-          <el-form-item label="专业名称">
-            <el-input v-model="tbSpecialty.spName"></el-input>
+          <el-form-item label="班级名称">
+            <el-input v-model="tbClazz.clName"></el-input>
           </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="专业编号">
-            <el-input v-model="tbSpecialty.spNum"></el-input>
+          <el-form-item label="班级编号">
+            <el-input v-model="tbClazz.clNum"></el-input>
+          </el-form-item>
+        </el-row>
+        <el-row>
+          <el-form-item label="班级年级">
+            <el-input v-model="tbClazz.clGrade"></el-input>
           </el-form-item>
         </el-row>
         <el-row :gutter="10">
           <el-form-item label="所属院系">
-            <el-form-item label="所属院系">
-              <el-select @change="getSelectDept()" style="width: 100%;" v-model="select1" placeholder="请选择所属院校">
-                <el-option v-for="item in tbCollege" :label="item.coName" :value="item.coId"></el-option>
-              </el-select>
-              <el-select style="width: 100%;" v-model="tbSpecialty.tbDept.deId" placeholder="请选择所属院校">
-                <el-option v-for="item in tbDept" :label="item.deName" :value="item.deId"></el-option>
-              </el-select>
-            </el-form-item>
+            <el-select @change="getSelectDept()" style="width: 100%;" v-model="select1" placeholder="请选择所属院校">
+              <el-option v-for="item in tbCollege" :label="item.coName" :value="item.coId"></el-option>
+            </el-select>
+            <el-select @change="getSelectSpecialty()" style="width: 100%;" v-model="select2" placeholder="请选择院系">
+              <el-option v-for="item in tbDept" :label="item.deName" :value="item.deId"></el-option>
+            </el-select>
+            <el-select style="width: 100%;" v-model="tbClazz.tbSpecialty.spId" placeholder="请选择院系">
+              <el-option v-for="item in tbSpecialty" :label="item.spName" :value="item.spId"></el-option>
+            </el-select>
           </el-form-item>
         </el-row>
       </el-form>
@@ -80,23 +90,30 @@
     <el-dialog title="修改专业" :visible.sync="editFlag" destroy-on-close>
       <el-form>
         <el-row :gutter="10">
-          <el-form-item label="专业名称">
-            <el-input v-model="tbSpecialty.spName"></el-input>
+          <el-form-item label="班级名称">
+            <el-input v-model="tbClazz.clName"></el-input>
           </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="专业编号">
-            <el-input v-model="tbSpecialty.spNum"></el-input>
+          <el-form-item label="班级编号">
+            <el-input v-model="tbClazz.clNum"></el-input>
+          </el-form-item>
+        </el-row>
+        <el-row>
+          <el-form-item label="班级年级">
+            <el-input v-model="tbClazz.clGrade"></el-input>
           </el-form-item>
         </el-row>
         <el-row :gutter="10">
           <el-form-item label="所属院系">
-            <el-select @change="getSelectDept()" style="width: 100%;" v-model="tbSpecialty.tbCollege.coId"
-              placeholder="请选择所属院校">
+            <el-select @change="getSelectDept()" style="width: 100%;" v-model="tbClazz.tbCollege.coId" placeholder="请选择所属院校">
               <el-option v-for="item in tbCollege" :label="item.coName" :value="item.coId"></el-option>
             </el-select>
-            <el-select style="width: 100%;" v-model="tbSpecialty.tbDept.deId" placeholder="请选择所属院校">
+            <el-select @change="getSelectSpecialty()" style="width: 100%;" v-model="tbClazz.tbDept.deId" placeholder="请选择院系">
               <el-option v-for="item in tbDept" :label="item.deName" :value="item.deId"></el-option>
+            </el-select>
+            <el-select style="width: 100%;" v-model="tbClazz.tbSpecialty.spId" placeholder="请选择院系">
+              <el-option v-for="item in tbSpecialty" :label="item.spName" :value="item.spId"></el-option>
             </el-select>
           </el-form-item>
         </el-row>
@@ -119,14 +136,17 @@ export default {
         page: 1,
         size: 10,
         total: 0,
-        spName: null
+        clName: null
       },
-      tbSpecialty: {
-        spId: null,
-        spName: null,
-        spNum: null,
-        createTime: null,
-        modifyTime: null,
+      tbClazz: {
+        clId: null,
+        clName: null,
+        clNum: null,
+        clGrade: null,
+        tbSpecialty: {
+          spId: null,
+          spName: null
+        },
         tbDept: {
           deId: null,
           deName: null
@@ -142,34 +162,48 @@ export default {
       options: [],
       tbCollege: [],
       tbDept: [],
+      tbSpecialty: [],
       select1: null,
-      selectFlag: null
+      select2: null,
+      selectFlag: 'open'
     }
   },
   methods: {
-
     clearSelect () {
       this.tbDept = null
       this.tbCollege = null
-      this.select1 = null
+      this.tbSpecialty = null
     },
     getSelectCollege () {
       this.tbDept = null
+      this.tbSpecialty = null
       this.$http.get('http://localhost/tbCollege/list')
         .then(response => {
           this.tbCollege = response.data.data
+          this.getSelectDept()
         })
     },
     getSelectDept () {
-      this.tbDept = null
+      this.tbSpecialty = null
+      let coId = this.tbClazz.tbCollege.coId
       if (this.selectFlag !== 'open') {
-        this.tbSpecialty.tbDept.deId = null
+        this.tbClazz.tbDept.deId = null
       }
-      this.selectFlag = 'no'
-      let coId = this.tbSpecialty.tbCollege.coId
       this.$http.get('http://localhost/tbDept/getDeptName?coId=' + coId)
         .then(response => {
           this.tbDept = response.data.data
+          this.getSelectSpecialty()
+        })
+    },
+    getSelectSpecialty () {
+      let deId = this.tbClazz.tbDept.deId
+      if (this.selectFlag !== 'open') {
+        this.tbClazz.tbSpecialty.spId = null
+      }
+      this.selectFlag = 'no'
+      this.$http.get('http://localhost/tbSpecialty/getSpecialtyNames?deId=' + deId)
+        .then(response => {
+          this.tbSpecialty = response.data.data
         })
     },
 
@@ -182,8 +216,8 @@ export default {
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          let spId = this.rowData.spId
-          this.$http.post('http://localhost/tbSpecialty/remove?spId=' + spId)
+          let clId = this.rowData.clId
+          this.$http.post('http://localhost/tbClazz/remove?clId=' + clId)
             .then(response => {
               if (response.data.code === 200) {
                 this.$message({
@@ -207,30 +241,24 @@ export default {
       }
     },
     update () {
-      if (this.rowData.spName === this.tbSpecialty.spName &&
-         this.rowData.spNum === this.tbSpecialty.spNum &&
-         this.rowData.tbDept.deId === this.tbSpecialty.tbDept.deId) {
-        this.$message.error('无效操作，请修改数据后重试')
-      } else {
-        this.$http.post('http://localhost/tbSpecialty/update', this.tbSpecialty)
-          .then(response => {
-            if (response.data.code === 200) {
-              this.$message({
-                message: '恭喜你，修改成功',
-                type: 'success'
-              })
-              this.closeDailog()
-            } else {
-              this.$message.error('修改失败，请重试')
-            }
-            this.listPage()
-          }).catch(error => {
-            this.$message.error(error)
-          })
-      }
+      this.$http.post('http://localhost/tbClazz/update', this.tbClazz)
+        .then(response => {
+          if (response.data.code === 200) {
+            this.$message({
+              message: '恭喜你，修改成功',
+              type: 'success'
+            })
+            this.closeDailog()
+          } else {
+            this.$message.error('修改失败，请重试')
+          }
+          this.listPage()
+        }).catch(error => {
+          this.$message.error(error)
+        })
     },
     save () {
-      this.$http.post('http://localhost/tbSpecialty/save', this.tbSpecialty)
+      this.$http.post('http://localhost/tbClazz/save', this.tbClazz)
         .then(response => {
           if (response.data.code === 200) {
             this.$message({
@@ -250,12 +278,15 @@ export default {
       this.addFlag = false
       this.editFlag = false
       this.clearSelect()
-      this.tbSpecialty = {
-        spId: null,
-        spName: null,
-        spNum: null,
-        createTime: null,
-        modifyTime: null,
+      this.tbClazz = {
+        clId: null,
+        clName: null,
+        clNum: null,
+        clGrade: null,
+        tbSpecialty: {
+          spId: null,
+          spName: null
+        },
         tbDept: {
           deId: null,
           deName: null
@@ -270,12 +301,17 @@ export default {
       if (this.rowData == null) {
         this.$message.error('请选择要修改的一行数据')
       } else {
-        this.editFlag = !this.editFlag
         this.selectFlag = 'open'
-        this.tbSpecialty = {
-          spId: this.rowData.spId,
-          spName: this.rowData.spName,
-          spNum: this.rowData.spNum,
+        this.editFlag = !this.editFlag
+        this.tbClazz = {
+          clId: this.rowData.clId,
+          clName: this.rowData.clName,
+          clNum: this.rowData.clNum,
+          clGrade: this.rowData.clGrade,
+          tbSpecialty: {
+            spId: this.rowData.tbSpecialty.spId,
+            spName: this.rowData.tbSpecialty.spName
+          },
           tbDept: {
             deId: this.rowData.tbDept.deId,
             deName: this.rowData.tbDept.deName
@@ -286,7 +322,6 @@ export default {
           }
         }
         this.getSelectCollege()
-        this.getSelectDept()
       }
     },
     openAddDailog () {
@@ -305,11 +340,11 @@ export default {
       this.listPage()
     },
     listPage () {
-      this.$http.get('http://localhost/tbSpecialty/listPage', {
+      this.$http.get('http://localhost/tbClazz/listPage', {
         params: {
           page: this.pager.page,
           size: this.pager.size,
-          spName: this.pager.spName
+          clName: this.pager.clName
         }
       }).then(response => {
         this.pager.total = response.data.data.total

@@ -3,6 +3,8 @@ package com.job.app.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.job.app.entity.TbStudent;
 
+import java.util.List;
+
 /**
  * (TbStudent)表服务接口
  *
@@ -11,5 +13,14 @@ import com.job.app.entity.TbStudent;
  */
 public interface TbStudentService extends IService<TbStudent> {
 
+    List<TbStudent> listPage(int page, int size, String sName);
+
+    int count(String sName);
+
+    Boolean update(TbStudent tbStudent);
+
+    boolean save(TbStudent tbStudent);
+
+    boolean updateImagesInt(TbStudent tbStudent);
 }
 

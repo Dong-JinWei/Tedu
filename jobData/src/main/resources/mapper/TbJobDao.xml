@@ -4,33 +4,84 @@
 
     <resultMap type="com.job.app.entity.TbJob" id="TbJobMap">
         <result property="jId" column="j_id" jdbcType="INTEGER"/>
-        <result property="sId" column="s_id" jdbcType="INTEGER"/>
-        <result property="cpId" column="cp_id" jdbcType="INTEGER"/>
         <result property="jSalary" column="j_salary" jdbcType="VARCHAR"/>
-        <result property="diId" column="di_id" jdbcType="INTEGER"/>
-        <result property="proId" column="pro_id" jdbcType="INTEGER"/>
         <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
         <result property="modifyTime" column="modify_time" jdbcType="VARCHAR"/>
         <result property="deleted" column="deleted" jdbcType="INTEGER"/>
+        <association property="tbStudent" javaType="com.job.app.entity.TbStudent">
+            <id property="sId" column="s_id"/>
+            <result property="sName" column="s_name"/>
+        </association>
+        <association property="tbCompany" javaType="com.job.app.entity.TbCompany">
+            <result property="cpId" column="cp_id"/>
+            <result property="cpName" column="cp_name"/>
+        </association>
+        <association property="tbDirection" javaType="com.job.app.entity.TbDirection">
+            <result property="diId" column="di_id"/>
+            <result property="diName" column="di_name"/>
+        </association>
+        <association property="tbProtocol" javaType="com.job.app.entity.TbProtocol">
+            <result property="proId" column="pro_id"/>
+            <result property="proName" column="pro_name"/>
+            <result property="proUrl" column="pro_url"/>
+        </association>
     </resultMap>
 
-    <!-- 批量插入 -->
-    <insert id="insertBatch" keyProperty="jId" useGeneratedKeys="true">
-        insert into ceap.tb_job(s_id, cp_id, j_salary, di_id, pro_id, create_time, modify_time, deleted)
-        values
-        <foreach collection="entities" item="entity" separator=",">
-        (#{entity.sId}, #{entity.cpId}, #{entity.jSalary}, #{entity.diId}, #{entity.proId}, #{entity.createTime}, #{entity.modifyTime}, #{entity.deleted})
-        </foreach>
+    <insert id="save">
+        insert into tb_job (s_id, cp_id, j_salary, di_id, pro_id, create_time, modify_time)
+        values (#{tbStudent.sId}, #{tbCompany.cpId}, #{jSalary}, #{tbDirection.diId}, #{tbProtocol.proId}, now(),
+                now());
     </insert>
-    <!-- 批量插入或按主键更新 -->
-    <insert id="insertOrUpdateBatch" keyProperty="jId" useGeneratedKeys="true">
-        insert into ceap.tb_job(s_id, cp_id, j_salary, di_id, pro_id, create_time, modify_time, deleted)
-        values
-        <foreach collection="entities" item="entity" separator=",">
-            (#{entity.sId}, #{entity.cpId}, #{entity.jSalary}, #{entity.diId}, #{entity.proId}, #{entity.createTime}, #{entity.modifyTime}, #{entity.deleted})
-        </foreach>
-        on duplicate key update
-         s_id = values(s_id) , cp_id = values(cp_id) , j_salary = values(j_salary) , di_id = values(di_id) , pro_id = values(pro_id) , create_time = values(create_time) , modify_time = values(modify_time) , deleted = values(deleted)     </insert>
+
+
+    <update id="update">
+        update tb_job
+        set s_id = #{tbStudent.sId},
+            cp_id = #{tbCompany.cpId},
+            j_salary = #{jSalary},
+            di_id = #{tbDirection.diId},
+            pro_id = #{tbProtocol.proId},
+            modify_time = now()
+        where j_id = #{jId};
+    </update>
+
+
+    <select id="listPage" resultMap="TbJobMap">
+        SELECT *
+        from tb_job tj
+        LEFT JOIN tb_student ts on tj.s_id = ts.s_id
+        LEFT JOIN tb_company tc on tj.cp_id = tc.cp_id
+        LEFT JOIN tb_direction td on tj.di_id = td.di_id
+        LEFT JOIN tb_protocol tp on tj.pro_id = tp.pro_id
+        <where>
+            <if test="keyword != null and keyword != ''">
+                ts.s_name like '%${keyword}%'
+                or tc.cp_name like '%${keyword}%'
+                or td.di_name like '%${keyword}%'
+                or tp.pro_name like '%${keyword}%'
+            </if>
+            and tj.deleted = 0
+        </where>
+        limit ${page}, ${size}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        SELECT count(*)
+        from tb_job tj
+        LEFT JOIN tb_student ts on tj.s_id = ts.s_id
+        LEFT JOIN tb_company tc on tj.cp_id = tc.cp_id
+        LEFT JOIN tb_direction td on tj.di_id = td.di_id
+        LEFT JOIN tb_protocol tp on tj.pro_id = tp.pro_id
+        <where>
+            <if test="keyword != null and keyword != ''">
+                ts.s_name like '%${keyword}%'
+                or tc.cp_name like '%${keyword}%'
+                or td.di_name like '%${keyword}%'
+                or tp.pro_name like '%${keyword}%'
+            </if>
+            and tj.deleted = 0
+        </where>
+    </select>
 
 </mapper>
 

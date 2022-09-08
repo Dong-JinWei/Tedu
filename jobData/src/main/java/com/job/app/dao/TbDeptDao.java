@@ -2,6 +2,7 @@ package com.job.app.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.job.app.entity.TbDept;
+import io.swagger.models.auth.In;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,5 +23,7 @@ public interface TbDeptDao extends BaseMapper<TbDept> {
     boolean save(TbDept tbDept);
 
     boolean update(TbDept tbDept);
+
+    List<TbDept> getDeptName(Integer coId);
 }
 

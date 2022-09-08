@@ -21,5 +21,11 @@ public interface TbSpecialtyService extends IService<TbSpecialty> {
 
     Boolean update(TbSpecialty tbSpecialty);
 
+    List<TbSpecialty> getSpecialtyNames(Integer deId);
+
+    List<TbSpecialty> getAllInfo(Integer spId);
+
+
+
 }
 

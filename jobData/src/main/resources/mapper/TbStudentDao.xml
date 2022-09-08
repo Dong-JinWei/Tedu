@@ -9,29 +9,80 @@
         <result property="sSex" column="s_sex" jdbcType="VARCHAR"/>
         <result property="sBirthday" column="s_birthday" jdbcType="VARCHAR"/>
         <result property="sPhoto" column="s_photo" jdbcType="VARCHAR"/>
-        <result property="clId" column="cl_id" jdbcType="INTEGER"/>
         <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
         <result property="modifyTime" column="modify_time" jdbcType="VARCHAR"/>
         <result property="deleted" column="deleted" jdbcType="INTEGER"/>
+        <association property="tbClazz" javaType="com.job.app.entity.TbClazz">
+            <id property="clId" column="cl_id"/>
+            <result property="clName" column="cl_name"/>
+        </association>
+        <association property="tbSpecialty" javaType="com.job.app.entity.TbSpecialty">
+            <id property="spId" column="sp_id"/>
+            <result property="spName" column="sp_name"/>
+        </association>
+        <association property="tbDept" javaType="com.job.app.entity.TbDept">
+            <id property="deId" column="de_id"/>
+            <result property="deName" column="de_name"/>
+        </association>
+        <association property="tbCollege" javaType="com.job.app.entity.TbCollege">
+            <id property="coId" column="co_id"/>
+            <result property="coName" column="co_name"/>
+        </association>
     </resultMap>
 
-    <!-- 批量插入 -->
-    <insert id="insertBatch" keyProperty="sId" useGeneratedKeys="true">
-        insert into ceap.tb_student(s_name, s_num, s_sex, s_birthday, s_photo, cl_id, create_time, modify_time, deleted)
-        values
-        <foreach collection="entities" item="entity" separator=",">
-        (#{entity.sName}, #{entity.sNum}, #{entity.sSex}, #{entity.sBirthday}, #{entity.sPhoto}, #{entity.clId}, #{entity.createTime}, #{entity.modifyTime}, #{entity.deleted})
-        </foreach>
+
+    <insert id="save">
+        insert into tb_student(s_name, s_num, s_sex, s_birthday, s_photo, cl_id, create_time, modify_time)
+        VALUES (#{sName}, #{sNum}, #{sSex}, #{sBirthday}, #{sPhoto}, #{tbClazz.clId}, now(), now())
     </insert>
-    <!-- 批量插入或按主键更新 -->
-    <insert id="insertOrUpdateBatch" keyProperty="sId" useGeneratedKeys="true">
-        insert into ceap.tb_student(s_name, s_num, s_sex, s_birthday, s_photo, cl_id, create_time, modify_time, deleted)
-        values
-        <foreach collection="entities" item="entity" separator=",">
-            (#{entity.sName}, #{entity.sNum}, #{entity.sSex}, #{entity.sBirthday}, #{entity.sPhoto}, #{entity.clId}, #{entity.createTime}, #{entity.modifyTime}, #{entity.deleted})
-        </foreach>
-        on duplicate key update
-         s_name = values(s_name) , s_num = values(s_num) , s_sex = values(s_sex) , s_birthday = values(s_birthday) , s_photo = values(s_photo) , cl_id = values(cl_id) , create_time = values(create_time) , modify_time = values(modify_time) , deleted = values(deleted)     </insert>
+
+    <update id="update">
+        update tb_student
+        set s_name      = #{sName},
+            s_num       = #{sNum},
+            s_sex       = #{sSex},
+            s_birthday  = #{sBirthday},
+            cl_id       = #{tbClazz.clId},
+            modify_time = now()
+        where s_id = #{sId}
+    </update>
+
+    <update id="updateImagesInt">
+        update tb_student
+        set s_photo = #{sPhoto}
+        where s_id = #{sId}
+    </update>
+
+    <select id="listPage" resultMap="TbStudentMap">
+        SELECT *
+        from tb_student ts
+        LEFT JOIN tb_clazz tc on ts.cl_id = tc.cl_id
+        LEFT JOIN tb_specialty tsp on tc.sp_id = tsp.sp_id
+        LEFT JOIN tb_dept td on tsp.de_id = td.de_id
+        LEFT JOIN tb_college co on td.co_id = co.co_id
+        <where>
+            <if test="sName != null and sName != ''">
+                ts.s_name like '%${sName}%'
+            </if>
+            and ts.deleted = 0
+        </where>
+        limit ${page}, ${size}
+    </select>
+    <select id="count" resultType="java.lang.Integer">
+        SELECT count(*)
+        from tb_student ts
+        LEFT JOIN tb_clazz tc on ts.cl_id = tc.cl_id
+        LEFT JOIN tb_specialty tsp on tc.sp_id = tsp.sp_id
+        LEFT JOIN tb_dept td on tsp.de_id = td.de_id
+        LEFT JOIN tb_college co on td.co_id = co.co_id
+        <where>
+            <if test="sName != null and sName != ''">
+                ts.s_name like '%${sName}%'
+            </if>
+            and ts.deleted = 0
+        </where>
+    </select>
+
 
 </mapper>
 

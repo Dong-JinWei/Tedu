@@ -45,5 +45,12 @@ public class TbStudent implements Serializable {
     @TableLogic
     private Integer deleted;
 
+    @TableField(exist = false)
+    private TbDept tbDept;
+    @TableField(exist = false)
+    private TbCollege tbCollege;
+    @TableField(exist = false)
+    private TbSpecialty tbSpecialty;
+
 }
 

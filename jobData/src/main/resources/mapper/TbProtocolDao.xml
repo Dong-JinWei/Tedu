@@ -3,7 +3,7 @@
 <mapper namespace="com.job.app.dao.TbProtocolDao">
 
     <resultMap type="com.job.app.entity.TbProtocol" id="TbProtocolMap">
-        <result property="proId" column="pro_id" jdbcType="INTEGER"/>
+        <id property="proId" column="pro_id" jdbcType="INTEGER"/>
         <result property="proName" column="pro_name" jdbcType="VARCHAR"/>
         <result property="proSize" column="pro_size" jdbcType="INTEGER"/>
         <result property="proUrl" column="pro_url" jdbcType="VARCHAR"/>
@@ -12,23 +12,10 @@
         <result property="deleted" column="deleted" jdbcType="INTEGER"/>
     </resultMap>
 
-    <!-- 批量插入 -->
-    <insert id="insertBatch" keyProperty="proId" useGeneratedKeys="true">
-        insert into ceap.tb_protocol(pro_name, pro_size, pro_url, create_time, modify_time, deleted)
-        values
-        <foreach collection="entities" item="entity" separator=",">
-        (#{entity.proName}, #{entity.proSize}, #{entity.proUrl}, #{entity.createTime}, #{entity.modifyTime}, #{entity.deleted})
-        </foreach>
+    <insert id="save" useGeneratedKeys="true" keyProperty="proId">
+        insert into tb_protocol (pro_name, pro_size, pro_url, create_time, modify_time)
+        values (#{proName},#{proSize},#{proUrl},now(),now());
     </insert>
-    <!-- 批量插入或按主键更新 -->
-    <insert id="insertOrUpdateBatch" keyProperty="proId" useGeneratedKeys="true">
-        insert into ceap.tb_protocol(pro_name, pro_size, pro_url, create_time, modify_time, deleted)
-        values
-        <foreach collection="entities" item="entity" separator=",">
-            (#{entity.proName}, #{entity.proSize}, #{entity.proUrl}, #{entity.createTime}, #{entity.modifyTime}, #{entity.deleted})
-        </foreach>
-        on duplicate key update
-         pro_name = values(pro_name) , pro_size = values(pro_size) , pro_url = values(pro_url) , create_time = values(create_time) , modify_time = values(modify_time) , deleted = values(deleted)     </insert>
 
 </mapper>
 

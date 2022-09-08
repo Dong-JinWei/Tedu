@@ -50,5 +50,17 @@
         limit #{page}, #{size}
     </select>
 
+    <select id="getDeptName" resultMap="TbDeptMap">
+        SELECT
+            td.de_id,
+            td.de_name,
+            tc.co_id,
+            tc.co_name
+        FROM
+            tb_dept td
+                LEFT JOIN tb_college tc ON td.co_id = tc.co_id
+        WHERE tc.co_id = #{coId} and td.deleted = 0
+    </select>
+
 </mapper>
 

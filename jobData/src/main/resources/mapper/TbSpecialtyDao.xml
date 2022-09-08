@@ -13,6 +13,10 @@
             <id property="deId" column="de_id"/>
             <result property="deName" column="de_name"/>
         </association>
+        <association property="tbCollege" javaType="com.job.app.entity.TbCollege">
+            <id property="coId" column="co_id"/>
+            <result property="coName" column="co_name"/>
+        </association>
     </resultMap>
 
     <insert id="save">
@@ -29,25 +33,47 @@
         where sp_id = #{spId}
     </update>
 
+
     <select id="listPage" resultMap="TbSpecialtyMap">
-        select * from tb_specialty ts left join tb_dept td on ts.de_id = td.de_id
-        <where>
-            <if test="spName != null and spName != ''">
-                ts.sp_name like '%${spName}%'
-            </if>
-            and ts.deleted = 0
-        </where>
-        limit ${page}, ${size}
+        SELECT *
+        from tb_specialty ts
+                 LEFT JOIN tb_dept td on ts.de_id = td.de_id
+                 LEFT JOIN tb_college tc on td.co_id = tc.co_id
+            <where>
+                <if test="spName != null and spName != ''">
+                    ts.sp_name like '%${spName}%'
+                </if>
+                and ts.deleted = 0
+            </where>
+            limit ${page}, ${size}
     </select>
 
     <select id="count" resultType="java.lang.Integer">
-        select count(*) from tb_specialty ts left join tb_dept td on ts.de_id = td.de_id
+        SELECT count(*)
+        from tb_specialty ts
+        LEFT JOIN tb_dept td on ts.de_id = td.de_id
+        LEFT JOIN tb_college tc on td.co_id = tc.co_id
         <where>
             <if test="spName != null and spName != ''">
                 ts.sp_name like '%${spName}%'
             </if>
             and ts.deleted = 0
         </where>
+    </select>
+    <select id="getSpecialtyNames" resultMap="TbSpecialtyMap">
+        SELECT tp.sp_id, tp.sp_name, td.de_id, td.de_name
+        from tb_specialty tp
+                 LEFT JOIN tb_dept td on tp.de_id = td.de_id
+        where tp.de_id = #{deId}
+          and tp.deleted = 0
+    </select>
+
+    <select id="getAllInfo" resultMap="TbSpecialtyMap">
+        SELECT ts.sp_id, ts.sp_name, ts.de_id, td.de_name, td.co_id, tc.co_name
+        from tb_specialty ts
+                 LEFT JOIN tb_dept td on ts.de_id = td.de_id
+                 LEFT JOIN tb_college tc on td.co_id = tc.co_id
+        WHERE ts.sp_id = #{spId}
     </select>
 
 

@@ -40,5 +40,10 @@ public class TbDeptServiceImpl extends ServiceImpl<TbDeptDao, TbDept> implements
     public boolean update(TbDept tbDept) {
         return tbDeptDao.update(tbDept);
     }
+
+    @Override
+    public List<TbDept> getDeptName(Integer coId) {
+        return tbDeptDao.getDeptName(coId);
+    }
 }
 

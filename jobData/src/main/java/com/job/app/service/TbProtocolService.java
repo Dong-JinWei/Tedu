@@ -11,5 +11,7 @@ import com.job.app.entity.TbProtocol;
  */
 public interface TbProtocolService extends IService<TbProtocol> {
 
+
+    boolean save(TbProtocol tbProtocol);
 }
 

@@ -14,8 +14,8 @@
                 <el-menu-item index="/college">学校管理</el-menu-item>
                 <el-menu-item index="/dept">院系管理</el-menu-item>
                 <el-menu-item index="/specialty">专业管理</el-menu-item>
-                <el-menu-item index="1-4">班级管理</el-menu-item>
-                <el-menu-item index="1-5">学生管理</el-menu-item>
+                <el-menu-item index="/clazz">班级管理</el-menu-item>
+                <el-menu-item index="/student">学生管理</el-menu-item>
                 </el-submenu>
 
                 <el-submenu index="2">
@@ -27,9 +27,13 @@
 
                 <el-submenu index="3">
                   <template slot="title">就业信息管理</template>
-                  <el-menu-item index="/area">就业信息</el-menu-item>
-                  <el-menu-item index="2-2">就业方向管理</el-menu-item>
-                  <el-menu-item index="2-3">协议信息管理</el-menu-item>
+                  <el-menu-item index="/job">就业信息</el-menu-item>
+                  <el-menu-item index="/direction">就业方向管理</el-menu-item>
+                  <el-menu-item index="/protocol">协议信息管理</el-menu-item>
+                </el-submenu>
+                <el-submenu index="4">
+                  <template slot="title">用户信息管理</template>
+                  <el-menu-item index="/user">用户信息</el-menu-item>
                 </el-submenu>
               </el-menu>
             </div>

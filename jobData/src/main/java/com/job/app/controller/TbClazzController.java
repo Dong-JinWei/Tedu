@@ -4,16 +4,14 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.job.app.entity.TbArea;
 import com.job.app.entity.TbClazz;
+import com.job.app.entity.TbSpecialty;
 import com.job.app.service.TbClazzService;
 import com.job.app.tools.CommonResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -49,15 +47,35 @@ public class TbClazzController {
     @ApiOperation("分页查询所有数据")
     @GetMapping("/listPage")
     public CommonResult listPage(int page, int size, String clName) {
-        QueryWrapper<TbClazz> queryWrapper = new QueryWrapper<>();
-        if (!"".equals(clName) && clName != null) {
-            queryWrapper.like("cl_name", clName);
-        }
         HashMap<String, Object> map = new HashMap<>();
-        map.put("total", tbClazzService.count(queryWrapper));
-        map.put("rows", tbClazzService.page(new Page<TbClazz>(page, size), queryWrapper).getRecords());
+        map.put("total", tbClazzService.count(clName));
+        map.put("rows", tbClazzService.listPage(page, size, clName));
         return CommonResult.success(map);
     }
 
+    @PostMapping("/save")
+    @ApiOperation("插入数据")
+    public CommonResult save(@RequestBody TbClazz tbClazz){
+        return CommonResult.success(tbClazzService.save(tbClazz));
+    }
+
+    @PostMapping("/update")
+    @ApiOperation("修改数据")
+    public CommonResult update(@RequestBody TbClazz tbClazz){
+        return CommonResult.success(tbClazzService.update(tbClazz));
+    }
+
+    @PostMapping("/remove")
+    @ApiOperation("删除数据")
+    public CommonResult remove(Integer clId){
+        return CommonResult.success(tbClazzService.removeById(clId));
+    }
+
+
+    @GetMapping("/getClazzNames")
+    @ApiOperation("根据专业查班级")
+    public CommonResult getClazzNames(Integer spId){
+        return CommonResult.success(tbClazzService.getClazzNames(spId));
+    }
 }
 

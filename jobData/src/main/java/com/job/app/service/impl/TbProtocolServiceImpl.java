@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.job.app.dao.TbProtocolDao;
 import com.job.app.entity.TbProtocol;
 import com.job.app.service.TbProtocolService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,5 +16,12 @@ import org.springframework.stereotype.Service;
 @Service("tbProtocolService")
 public class TbProtocolServiceImpl extends ServiceImpl<TbProtocolDao, TbProtocol> implements TbProtocolService {
 
+    @Autowired
+    private TbProtocolDao tbProtocolDao;
+
+    @Override
+    public boolean save(TbProtocol tbProtocol) {
+        return tbProtocolDao.save(tbProtocol);
+    }
 }
 

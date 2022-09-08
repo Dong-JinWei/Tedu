@@ -21,5 +21,8 @@ public interface TbDeptService extends IService<TbDept> {
     boolean save(TbDept tbDept);
 
     boolean update(TbDept tbDept);
+
+    List<TbDept> getDeptName(Integer coId);
+
 }
 

@@ -41,5 +41,15 @@ public class TbSpecialtyServiceImpl extends ServiceImpl<TbSpecialtyDao, TbSpecia
     public Boolean update(TbSpecialty tbSpecialty) {
         return tbSpecialtyDao.update(tbSpecialty);
     }
+
+    @Override
+    public List<TbSpecialty> getSpecialtyNames(Integer deId) {
+        return tbSpecialtyDao.getSpecialtyNames(deId);
+    }
+
+    @Override
+    public List<TbSpecialty> getAllInfo(Integer spId) {
+        return tbSpecialtyDao.getAllInfo(spId);
+    }
 }
 

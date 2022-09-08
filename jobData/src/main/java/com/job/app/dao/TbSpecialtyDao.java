@@ -2,6 +2,7 @@ package com.job.app.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.job.app.entity.TbSpecialty;
+import org.apache.poi.util.Internal;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,5 +23,9 @@ public interface TbSpecialtyDao extends BaseMapper<TbSpecialty> {
     boolean save(TbSpecialty tbSpecialty);
 
     Boolean update(TbSpecialty tbSpecialty);
+
+    List<TbSpecialty> getSpecialtyNames(Integer deId);
+
+    List<TbSpecialty> getAllInfo(Integer spId);
 }
 

@@ -39,5 +39,8 @@ public class TbSpecialty implements Serializable {
     @TableLogic
     private Integer deleted;
 
+    @TableField(exist = false)
+    private TbCollege tbCollege;
+
 }
 

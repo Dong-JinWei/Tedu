@@ -3,6 +3,7 @@ package com.job.app.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.job.app.dao.TbRegionDao;
 import com.job.app.entity.TbRegion;
+import com.job.app.entity.TbSpecialty;
 import com.job.app.service.TbRegionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,6 +53,8 @@ public class TbRegionServiceImpl extends ServiceImpl<TbRegionDao, TbRegion> impl
     public List<TbRegion> getName(String reShortname) {
         return tbRegionDao.getName(reShortname);
     }
+
+
 
 
 }

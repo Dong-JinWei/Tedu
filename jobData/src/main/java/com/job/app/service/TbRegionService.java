@@ -2,6 +2,7 @@ package com.job.app.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.job.app.entity.TbRegion;
+import com.job.app.entity.TbSpecialty;
 
 import java.util.List;
 
@@ -24,5 +25,7 @@ public interface TbRegionService extends IService<TbRegion> {
     List<String> getShortname();
 
     List<TbRegion> getName(String reShortname);
+
+
 }
 

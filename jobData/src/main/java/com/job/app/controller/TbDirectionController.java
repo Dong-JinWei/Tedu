@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.job.app.entity.TbArea;
 import com.job.app.entity.TbDirection;
+import com.job.app.entity.TbUser;
 import com.job.app.service.TbDirectionService;
 import com.job.app.tools.CommonResult;
 import io.swagger.annotations.Api;
@@ -11,10 +12,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.poi.ss.formula.functions.T;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -58,6 +56,25 @@ public class TbDirectionController {
         map.put("total", tbDirectionService.count(queryWrapper));
         map.put("rows", tbDirectionService.page(new Page<TbDirection>(page, size), queryWrapper).getRecords());
         return CommonResult.success(map);
+    }
+
+
+    @PostMapping("/save")
+    @ApiOperation("插入数据")
+    public CommonResult save(@RequestBody TbDirection tbDirection){
+        return CommonResult.success(tbDirectionService.save(tbDirection));
+    }
+
+    @PostMapping("/update")
+    @ApiOperation("修改数据")
+    public CommonResult update(@RequestBody TbDirection tbDirection){
+        return CommonResult.success(tbDirectionService.updateById(tbDirection));
+    }
+
+    @PostMapping("/remove")
+    @ApiOperation("删除数据")
+    public CommonResult remove(Integer diId){
+        return CommonResult.success(tbDirectionService.removeById(diId));
     }
 }
 

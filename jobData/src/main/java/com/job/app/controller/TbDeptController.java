@@ -12,6 +12,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -73,6 +74,11 @@ public class TbDeptController {
         return CommonResult.success(tbDeptService.removeById(deId));
     }
 
+    @GetMapping("/getDeptName")
+    @ApiOperation("查询院系所对应的学校")
+    public CommonResult getDeptName(Integer coId){
+        return CommonResult.success(tbDeptService.getDeptName(coId));
+    }
 
 
 
