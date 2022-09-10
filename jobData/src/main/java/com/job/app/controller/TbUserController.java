@@ -2,8 +2,7 @@ package com.job.app.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.job.app.entity.TbCollege;
-import com.job.app.entity.TbDirection;
+import com.job.app.entity.TbStudent;
 import com.job.app.entity.TbUser;
 import com.job.app.service.TbUserService;
 import com.job.app.tools.CommonResult;
@@ -19,7 +18,7 @@ import java.util.HashMap;
 /**
  * (TbUser)表控制层
  *
- * @author DongJinwei
+ * @author DongJinweiÒ
  * @since 2022-09-03 13:46:11
  */
 @RestController
@@ -36,7 +35,7 @@ public class TbUserController {
 
     @ApiOperation("查询所有数据")
     @GetMapping("/list")
-    public CommonResult list(){
+    public CommonResult list() {
         return CommonResult.success(tbUserService.list());
     }
 
@@ -60,21 +59,49 @@ public class TbUserController {
 
     @PostMapping("/save")
     @ApiOperation("插入数据")
-    public CommonResult save(@RequestBody TbUser tbUser){
+    public CommonResult save(@RequestBody TbUser tbUser) {
         return CommonResult.success(tbUserService.save(tbUser));
     }
 
     @PostMapping("/update")
     @ApiOperation("修改数据")
-    public CommonResult update(@RequestBody TbUser tbUser){
+    public CommonResult update(@RequestBody TbUser tbUser) {
         return CommonResult.success(tbUserService.updateById(tbUser));
     }
 
     @PostMapping("/remove")
     @ApiOperation("删除数据")
-    public CommonResult remove(Integer uId){
+    public CommonResult remove(Integer uId) {
         return CommonResult.success(tbUserService.removeById(uId));
     }
 
+    @ApiOperation("登陆")
+    @GetMapping("/login")
+    public CommonResult login(String uName, String uPassword) {
+        QueryWrapper<TbUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("u_name", uName);
+        TbUser user = tbUserService.getOne(queryWrapper);
+        if (user != null) {
+            if (user.getUPassword().equals(uPassword)) {
+                return CommonResult.success(user, "登陆成功");
+            } else {
+                return CommonResult.failed("error");
+            }
+        }
+        return CommonResult.failed("no");
+    }
+
+    @ApiOperation("登陆")
+    @PostMapping("/register")
+    public CommonResult register(@RequestBody TbUser tbUser) {
+        QueryWrapper<TbUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("u_name", tbUser.getUName());
+        TbUser user = tbUserService.getOne(queryWrapper);
+        if (user != null) {
+            return CommonResult.failed("has");
+        } else {
+            return CommonResult.success(tbUserService.save(tbUser), "ok");
+        }
+    }
 }
 

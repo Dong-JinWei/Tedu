@@ -1,58 +1,54 @@
 <template>
   <el-container>
-      <el-header>
-        <el-row :gutter="10">
-          <el-col :span="4">
-            <el-link href="#/welcome" :underline="false" style="font-size: 20px;">就业分析平台</el-link>
-          </el-col>
-          <el-col :span="16">
-            <div class="grid-content">
-              <el-menu router class="el-menu-demo" mode="horizontal">
+    <el-header>
+      <el-row :gutter="10">
+        <!-- <el-col :span="4"> -->
+        <!-- </el-col> -->
+        <!-- <el-col :span="16"> -->
+        <div class="grid-content">
+          <el-menu router class="el-menu-demo" mode="horizontal">
+            <el-menu-item index="1">
+              <el-link id="logo" href="#/welcome" :underline="false" style="font-size: 20px;">就业分析平台</el-link>
+            </el-menu-item>
+            <el-submenu index="2">
+              <template slot="title">学生信息管理</template>
+              <el-menu-item index="/college">学校管理</el-menu-item>
+              <el-menu-item index="/dept">院系管理</el-menu-item>
+              <el-menu-item index="/specialty">专业管理</el-menu-item>
+              <el-menu-item index="/clazz">班级管理</el-menu-item>
+              <el-menu-item index="/student">学生管理</el-menu-item>
+            </el-submenu>
 
-                <el-submenu index="1">
-                <template slot="title">学生信息管理</template>
-                <el-menu-item index="/college">学校管理</el-menu-item>
-                <el-menu-item index="/dept">院系管理</el-menu-item>
-                <el-menu-item index="/specialty">专业管理</el-menu-item>
-                <el-menu-item index="/clazz">班级管理</el-menu-item>
-                <el-menu-item index="/student">学生管理</el-menu-item>
-                </el-submenu>
+            <el-submenu index="3">
+              <template slot="title">企业信息管理</template>
+              <el-menu-item index="/area">区域管理</el-menu-item>
+              <el-menu-item index="/region">省/市/区管理</el-menu-item>
+              <el-menu-item index="/company">企业管理</el-menu-item>
+            </el-submenu>
 
-                <el-submenu index="2">
-                  <template slot="title">企业信息管理</template>
-                  <el-menu-item index="/area">区域管理</el-menu-item>
-                  <el-menu-item index="/region">省/市/区管理</el-menu-item>
-                  <el-menu-item index="/company">企业管理</el-menu-item>
-                </el-submenu>
+            <el-submenu index="4">
+              <template slot="title">就业信息管理</template>
+              <el-menu-item index="/job">就业信息</el-menu-item>
+              <el-menu-item index="/direction">就业方向管理</el-menu-item>
+              <el-menu-item index="/protocol">协议信息管理</el-menu-item>
+            </el-submenu>
+            <el-submenu index="5">
+              <template slot="title">用户信息管理</template>
+              <el-menu-item index="/user">用户信息</el-menu-item>
+            </el-submenu>
+            <el-menu-item id="info" index="6">
 
-                <el-submenu index="3">
-                  <template slot="title">就业信息管理</template>
-                  <el-menu-item index="/job">就业信息</el-menu-item>
-                  <el-menu-item index="/direction">就业方向管理</el-menu-item>
-                  <el-menu-item index="/protocol">协议信息管理</el-menu-item>
-                </el-submenu>
-                <el-submenu index="4">
-                  <template slot="title">用户信息管理</template>
-                  <el-menu-item index="/user">用户信息</el-menu-item>
-                </el-submenu>
-              </el-menu>
-            </div>
-          </el-col>
-          <el-col :span="4">
-            <div class="grid-content">
-              <div style="float: right;">
-                <span>user</span>
-              </div>
-              <div style="margin-top: 10px;float: right;padding: 0px 5px;">
-                <el-avatar icon="el-icon-user-solid"></el-avatar>
-              </div>
+              当前登陆用户：<el-tag size="medium">{{uname}}</el-tag>
+            </el-menu-item>
+          </el-menu>
+        </div>
+        <!-- </el-col> -->
+        <!-- <el-col :offset="2" :span="2"> -->
+        <!-- </el-col> -->
+      </el-row>
+    </el-header>
 
-            </div>
-          </el-col>
-        </el-row>
-      </el-header>
-
-      <el-main>
+    <el-main>
       <!-- 路由显示器 -->
       <router-view>
 
@@ -63,9 +59,33 @@
 </template>
 
 <script>
+export default {
+
+  data () {
+    return {
+      uname: null
+    }
+  },
+  methods: {
+
+    show () {
+      let userInfo = JSON.parse(sessionStorage.getItem('user'))
+      this.uname = userInfo.uname
+    }
+  },
+  mounted () {
+    this.show()
+  }
+
+}
 </script>
 
 <style>
+  #info {
+    float: right;
+    right: 10px;
+  }
+
   body {
     background: #F8F8F8;
   }

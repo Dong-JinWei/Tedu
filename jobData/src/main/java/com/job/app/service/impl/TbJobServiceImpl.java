@@ -2,6 +2,7 @@ package com.job.app.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.job.app.dao.TbJobDao;
+import com.job.app.entity.BigData;
 import com.job.app.entity.TbJob;
 import com.job.app.service.TbJobService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,11 @@ public class TbJobServiceImpl extends ServiceImpl<TbJobDao, TbJob> implements Tb
     }
 
     @Override
+    public List<TbJob> listAll() {
+        return tbJobDao.listAll();
+    }
+
+    @Override
     public int count(String keyword) {
         return tbJobDao.count(keyword);
     }
@@ -39,6 +45,11 @@ public class TbJobServiceImpl extends ServiceImpl<TbJobDao, TbJob> implements Tb
     @Override
     public boolean update(TbJob tbJob) {
         return tbJobDao.update(tbJob) > 0;
+    }
+
+    @Override
+    public List<BigData> cityOrder() {
+        return tbJobDao.cityOrder();
     }
 }
 

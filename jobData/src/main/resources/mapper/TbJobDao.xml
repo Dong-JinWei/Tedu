@@ -36,11 +36,11 @@
 
     <update id="update">
         update tb_job
-        set s_id = #{tbStudent.sId},
-            cp_id = #{tbCompany.cpId},
-            j_salary = #{jSalary},
-            di_id = #{tbDirection.diId},
-            pro_id = #{tbProtocol.proId},
+        set s_id        = #{tbStudent.sId},
+            cp_id       = #{tbCompany.cpId},
+            j_salary    = #{jSalary},
+            di_id       = #{tbDirection.diId},
+            pro_id      = #{tbProtocol.proId},
             modify_time = now()
         where j_id = #{jId};
     </update>
@@ -81,6 +81,24 @@
             </if>
             and tj.deleted = 0
         </where>
+    </select>
+    <select id="listAll" resultMap="TbJobMap">
+        SELECT *
+        from tb_job tj
+                 LEFT JOIN tb_student ts on tj.s_id = ts.s_id
+                 LEFT JOIN tb_company tc on tj.cp_id = tc.cp_id
+                 LEFT JOIN tb_direction td on tj.di_id = td.di_id
+                 LEFT JOIN tb_protocol tp on tj.pro_id = tp.pro_id
+        where tj.deleted = 0
+        limit 100
+    </select>
+    <select id="cityOrder" resultType="com.job.app.entity.BigData">
+        SELECT COUNT(tj.j_id) as `value`, tr.re_shortname as `name`
+        from tb_job tj
+                 LEFT JOIN tb_company tc on tj.cp_id = tc.cp_id
+                 LEFT JOIN tb_region tr on tc.re_id = tr.re_id
+        GROUP BY tr.re_shortname
+        ORDER BY `value` DESC
     </select>
 
 </mapper>

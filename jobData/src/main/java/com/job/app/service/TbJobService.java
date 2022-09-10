@@ -1,6 +1,7 @@
 package com.job.app.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.job.app.entity.BigData;
 import com.job.app.entity.TbJob;
 
 import java.util.List;
@@ -14,12 +15,17 @@ import java.util.List;
 public interface TbJobService extends IService<TbJob> {
 
     List<TbJob> listPage(int page, int size, String keyword);
+    List<TbJob> listAll();
+
 
     int count(String keyword);
 
     boolean save(TbJob tbJob);
 
     boolean update(TbJob tbJob);
+
+    List<BigData> cityOrder();
+
 
 }
 
