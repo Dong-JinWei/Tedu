@@ -21,8 +21,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <dependencies>
 
+
+    <dependencies>
         <!-- 上传头像 -->
         <dependency>
             <groupId>commons-net</groupId>

@@ -3,6 +3,7 @@ package com.job.app.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.job.app.dao.TbStudentDao;
 import com.job.app.entity.TbStudent;
+import com.job.app.entity.Top5;
 import com.job.app.service.TbStudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,6 +45,11 @@ public class TbStudentServiceImpl extends ServiceImpl<TbStudentDao, TbStudent> i
     @Override
     public boolean updateImagesInt(TbStudent tbStudent) {
         return tbStudentDao.updateImagesInt(tbStudent) > 0;
+    }
+
+    @Override
+    public List<Top5> getTop5() {
+        return tbStudentDao.getTop5();
     }
 }
 

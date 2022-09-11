@@ -59,6 +59,13 @@ public class TbStudentController {
     private String url;
 
 
+    @GetMapping("/getTop5")
+    @ApiOperation("获取前五名")
+    public CommonResult getTop5(){
+        return CommonResult.success(tbStudentService.getTop5());
+    }
+
+
     @ApiOperation("查询所有数据")
     @GetMapping("/list")
     public CommonResult list() {

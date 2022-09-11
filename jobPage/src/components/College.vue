@@ -17,8 +17,10 @@
             clearable>
           </el-input>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="2">
           <el-button plain icon="el-icon-search"></el-button>
+        </el-col>
+        <el-col :span="4" v-if="isAdmin">
           <el-button plain icon="el-icon-plus" @click="openAddDailog()"></el-button>
           <el-button plain icon="el-icon-edit" @click="openEditDailog()"></el-button>
           <el-button plain icon="el-icon-delete" @click="remove()"></el-button>
@@ -51,27 +53,27 @@
     </el-card>
     <!-- 添加对话框 -->
     <el-dialog title="添加学校" :visible.sync="addFlag" destroy-on-close>
-      <el-form>
+      <el-form :model="tbCollage" :rules="rules" ref="tbCollage">
         <el-row :gutter="10">
           <el-col :span="12">
-            <el-form-item label="学校名称">
+            <el-form-item label="学校名称" prop="coName">
               <el-input v-model="tbCollage.coName"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="学校地址">
+            <el-form-item label="学校地址" prop="coAddr">
               <el-input v-model="tbCollage.coAddr"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="10">
           <el-col :span="12">
-            <el-form-item label="学校编号">
+            <el-form-item label="学校编号" prop="coNum">
               <el-input v-model="tbCollage.coNum"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="学校邮箱">
+            <el-form-item label="学校邮箱" prop="coEmail">
               <el-input v-model="tbCollage.coEmail"></el-input>
             </el-form-item>
           </el-col>
@@ -84,27 +86,27 @@
     </el-dialog>
     <!-- 修改对话框-->
     <el-dialog title="修改学校" :visible.sync="editFlag" destroy-on-close>
-      <el-form>
+      <el-form :model="tbCollage" :rules="rules" ref="tbCollage">
         <el-row :gutter="10">
           <el-col :span="12">
-            <el-form-item label="学校名称">
+            <el-form-item label="学校名称" prop="coName">
               <el-input v-model="tbCollage.coName"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="学校地址">
+            <el-form-item label="学校地址" prop="coAddr">
               <el-input v-model="tbCollage.coAddr"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="10">
           <el-col :span="12">
-            <el-form-item label="学校编号">
+            <el-form-item label="学校编号" prop="coNum">
               <el-input v-model="tbCollage.coNum"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="学校邮箱">
+            <el-form-item label="学校邮箱" prop="coEmail">
               <el-input v-model="tbCollage.coEmail"></el-input>
             </el-form-item>
           </el-col>
@@ -140,11 +142,33 @@ export default {
       rowData: null,
       addFlag: false,
       editFlag: false,
-      options: []
+      options: [],
+      isAdmin: false,
+      rules: {
+        coName: [{
+          required: true,
+          message: '请输入学校名称',
+          trigger: 'blur'
+        }],
+        coAddr: [{
+          required: true,
+          message: '请输入学校地址',
+          trigger: 'blur'
+        }],
+        coNum: [{
+          required: true,
+          message: '请输入学校编号',
+          trigger: 'blur'
+        }],
+        coEmail: [{
+          required: true,
+          message: '请输入学校邮箱',
+          trigger: 'blur'
+        }]
+      }
     }
   },
   methods: {
-
     remove () {
       if (this.rowData == null) {
         this.$message.error('请选择要删除的一行数据')
@@ -196,28 +220,27 @@ export default {
         })
     },
     save () {
-      this.$http.post('http://localhost/tbCollege/save', this.tbCollage)
-        .then(response => {
-          if (response.data.code === 200) {
-            this.$message({
-              message: '恭喜你，添加成功',
-              type: 'success'
+      this.$refs['user'].validate((valid) => {
+        if (valid) {
+          this.$http.post('http://localhost/tbCollege/save', this.tbCollage)
+            .then(response => {
+              if (response.data.code === 200) {
+                this.$message({
+                  message: '恭喜你，添加成功',
+                  type: 'success'
+                })
+                this.closeDailog()
+              } else {
+                this.$message.error('添加失败，请重试')
+              }
+              this.listPage()
+            }).catch(error => {
+              this.$message.error(error)
             })
-            this.closeDailog()
-          } else {
-            this.$message.error('添加失败，请重试')
-          }
-          this.listPage()
-        }).catch(error => {
-          this.$message.error(error)
-        })
+        }
+      })
     },
-    // getRegion () {
-    //   this.$http.get('http://localhost/tbRegion/getRegion')
-    //     .then(response => {
-    //       this.options = response.data.data
-    //     })
-    // },
+
     closeDailog () {
       this.addFlag = false
       this.editFlag = false
@@ -233,7 +256,6 @@ export default {
       if (this.rowData == null) {
         this.$message.error('请选择要修改的一行数据')
       } else {
-        console.log(this.rowData)
         this.editFlag = !this.editFlag
         this.tbCollage = {
           coId: this.rowData.coId,
@@ -246,7 +268,6 @@ export default {
     },
     openAddDailog () {
       this.addFlag = !this.addFlag
-      this.getRegion()
     },
     selectOneRow (val) {
       this.rowData = val
@@ -272,10 +293,17 @@ export default {
       }).catch(error => {
         console.log(error)
       })
+    },
+    isAdminUser () {
+      let userInfo = JSON.parse(sessionStorage.getItem('user'))
+      if (userInfo.uname === 'admin') {
+        this.isAdmin = true
+      }
     }
   },
   mounted () {
     this.listPage()
+    this.isAdminUser()
   }
 
 }

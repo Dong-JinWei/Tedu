@@ -2,6 +2,7 @@ package com.job.app.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.job.app.entity.TbStudent;
+import com.job.app.entity.Top5;
 
 import java.util.List;
 
@@ -22,5 +23,8 @@ public interface TbStudentService extends IService<TbStudent> {
     boolean save(TbStudent tbStudent);
 
     boolean updateImagesInt(TbStudent tbStudent);
+
+    List<Top5> getTop5();
+
 }
 

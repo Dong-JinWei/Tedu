@@ -17,11 +17,8 @@
             clearable>
           </el-input>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="2">
           <el-button plain icon="el-icon-search"></el-button>
-          <el-button plain icon="el-icon-plus" @click="openAddDailog()"></el-button>
-          <el-button plain icon="el-icon-edit" @click="openEditDailog()"></el-button>
-          <!-- <el-button plain icon="el-icon-delete" @click="remove()"></el-button> -->
         </el-col>
       </el-row>
     </el-card>
@@ -196,90 +193,7 @@ export default {
     }
   },
   methods: {
-    remove () {
-    },
-    update () {
-      this.$refs['tbRegion'].validate(valid => {
-        if (valid) {
-          this.$http.post('http://localhost/tbRegion/update', this.tbRegion)
-            .then(response => {
-              if (response.data.code === 200) {
-                this.$message({
-                  message: '恭喜你，添加成功',
-                  type: 'success'
-                })
-                this.closeDailog()
-              } else {
-                this.$message.error('添加失败，请重试')
-              }
-              this.listPage()
-            }).catch(error => {
-              this.$message.error(error)
-            })
-        } else {
-          this.$message.error('请将表单填写完整')
-        }
-      })
-    },
-    save () {
-      this.$refs['tbRegion'].validate(valid => {
-        if (valid) {
-          this.$http.post('http://localhost/tbRegion/save', this.tbRegion)
-            .then(response => {
-              if (response.data.code === 200) {
-                this.$message({
-                  message: '恭喜你，添加成功',
-                  type: 'success'
-                })
-                this.closeDailog()
-              } else {
-                this.$message.error('添加失败，请重试')
-              }
-              this.listPage()
-            }).catch(error => {
-              this.$message.error(error)
-            })
-        } else {
-          this.$message.error('请将表单填写完整')
-        }
-      })
-    },
-    closeDailog () {
-      this.addFlag = false
-      this.editFlag = false
-      this.tbRegion = {
-        reId: null,
-        reName: null,
-        reShortname: null,
-        recode: null,
-        reLevel: null,
-        reParentId: null,
-        tbArea: {
-          arId: null,
-          arName: null
-        }
-      }
-    },
-    openEditDailog () {
-      if (this.rowData == null) {
-        this.$message.error('请选择要修改的一行数据')
-      } else {
-        this.editFlag = !this.editFlag
-        this.getTbAreaList()
-        this.tbRegion = {
-          reId: this.rowData.reId,
-          reName: this.rowData.reName,
-          reShortname: this.rowData.reShortname,
-          reCode: this.rowData.reCode,
-          reLevel: this.rowData.reLevel,
-          reParentId: this.rowData.reParentId,
-          tbArea: {
-            arId: this.rowData.tbArea.arId,
-            arName: this.rowData.tbArea.arName
-          }
-        }
-      }
-    },
+
     openAddDailog () {
       this.addFlag = !this.addFlag
       this.getTbAreaList()

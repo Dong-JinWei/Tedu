@@ -17,8 +17,10 @@
             clearable>
           </el-input>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="2">
           <el-button plain icon="el-icon-search"></el-button>
+        </el-col>
+        <el-col :span="4" v-if="isAdmin">
           <el-button plain icon="el-icon-plus" @click="openAddDailog()"></el-button>
           <el-button plain icon="el-icon-edit" @click="openEditDailog()"></el-button>
           <el-button plain icon="el-icon-delete" @click="remove()"></el-button>
@@ -51,19 +53,19 @@
     </el-card>
     <!-- 添加对话框 -->
     <el-dialog title="添加班级" :visible.sync="addFlag" destroy-on-close>
-      <el-form>
+      <el-form :model="tbClazz" :rules="rules" ref="tbClazz">
         <el-row :gutter="10">
-          <el-form-item label="班级名称">
+          <el-form-item label="班级名称" prop="clName">
             <el-input v-model="tbClazz.clName"></el-input>
           </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="班级编号">
+          <el-form-item label="班级编号" prop="clNum">
             <el-input v-model="tbClazz.clNum"></el-input>
           </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="班级年级">
+          <el-form-item label="班级年级" prop="clGrade">
             <el-input v-model="tbClazz.clGrade"></el-input>
           </el-form-item>
         </el-row>
@@ -88,28 +90,30 @@
     </el-dialog>
     <!-- 修改对话框 -->
     <el-dialog title="修改专业" :visible.sync="editFlag" destroy-on-close>
-      <el-form>
+      <el-form :model="tbClazz" :rules="rules" ref="tbClazz">
         <el-row :gutter="10">
-          <el-form-item label="班级名称">
+          <el-form-item label="班级名称" prop="clName">
             <el-input v-model="tbClazz.clName"></el-input>
           </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="班级编号">
+          <el-form-item label="班级编号" prop="clNum">
             <el-input v-model="tbClazz.clNum"></el-input>
           </el-form-item>
         </el-row>
         <el-row>
-          <el-form-item label="班级年级">
+          <el-form-item label="班级年级" prop="clGrade">
             <el-input v-model="tbClazz.clGrade"></el-input>
           </el-form-item>
         </el-row>
         <el-row :gutter="10">
           <el-form-item label="所属院系">
-            <el-select @change="getSelectDept()" style="width: 100%;" v-model="tbClazz.tbCollege.coId" placeholder="请选择所属院校">
+            <el-select @change="getSelectDept()" style="width: 100%;" v-model="tbClazz.tbCollege.coId"
+              placeholder="请选择所属院校">
               <el-option v-for="item in tbCollege" :label="item.coName" :value="item.coId"></el-option>
             </el-select>
-            <el-select @change="getSelectSpecialty()" style="width: 100%;" v-model="tbClazz.tbDept.deId" placeholder="请选择院系">
+            <el-select @change="getSelectSpecialty()" style="width: 100%;" v-model="tbClazz.tbDept.deId"
+              placeholder="请选择院系">
               <el-option v-for="item in tbDept" :label="item.deName" :value="item.deId"></el-option>
             </el-select>
             <el-select style="width: 100%;" v-model="tbClazz.tbSpecialty.spId" placeholder="请选择院系">
@@ -128,237 +132,264 @@
 </template>
 
 <script>
-export default {
-  data () {
-    return {
-      tableData: [],
-      pager: {
-        page: 1,
-        size: 10,
-        total: 0,
-        clName: null
-      },
-      tbClazz: {
-        clId: null,
-        clName: null,
-        clNum: null,
-        clGrade: null,
-        tbSpecialty: {
-          spId: null,
-          spName: null
+  export default {
+    data() {
+      return {
+        tableData: [],
+        pager: {
+          page: 1,
+          size: 10,
+          total: 0,
+          clName: null
         },
-        tbDept: {
-          deId: null,
-          deName: null
-        },
-        tbCollege: {
-          coId: null,
-          coName: null
-        }
-      },
-      rowData: null,
-      addFlag: false,
-      editFlag: false,
-      options: [],
-      tbCollege: [],
-      tbDept: [],
-      tbSpecialty: [],
-      select1: null,
-      select2: null,
-      selectFlag: 'open'
-    }
-  },
-  methods: {
-    clearSelect () {
-      this.tbDept = null
-      this.tbCollege = null
-      this.tbSpecialty = null
-    },
-    getSelectCollege () {
-      this.tbDept = null
-      this.tbSpecialty = null
-      this.$http.get('http://localhost/tbCollege/list')
-        .then(response => {
-          this.tbCollege = response.data.data
-          this.getSelectDept()
-        })
-    },
-    getSelectDept () {
-      this.tbSpecialty = null
-      let coId = this.tbClazz.tbCollege.coId
-      if (this.selectFlag !== 'open') {
-        this.tbClazz.tbDept.deId = null
-      }
-      this.$http.get('http://localhost/tbDept/getDeptName?coId=' + coId)
-        .then(response => {
-          this.tbDept = response.data.data
-          this.getSelectSpecialty()
-        })
-    },
-    getSelectSpecialty () {
-      let deId = this.tbClazz.tbDept.deId
-      if (this.selectFlag !== 'open') {
-        this.tbClazz.tbSpecialty.spId = null
-      }
-      this.selectFlag = 'no'
-      this.$http.get('http://localhost/tbSpecialty/getSpecialtyNames?deId=' + deId)
-        .then(response => {
-          this.tbSpecialty = response.data.data
-        })
-    },
-
-    remove () {
-      if (this.rowData == null) {
-        this.$message.error('请选择要删除的一行数据')
-      } else {
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          let clId = this.rowData.clId
-          this.$http.post('http://localhost/tbClazz/remove?clId=' + clId)
-            .then(response => {
-              if (response.data.code === 200) {
-                this.$message({
-                  message: '恭喜你，删除成功',
-                  type: 'success'
-                })
-                this.closeDailog()
-              } else {
-                this.$message.error('删除失败，请重试')
-              }
-              this.listPage()
-            }).catch(error => {
-              this.$message.error(error)
-            })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
-        })
-      }
-    },
-    update () {
-      this.$http.post('http://localhost/tbClazz/update', this.tbClazz)
-        .then(response => {
-          if (response.data.code === 200) {
-            this.$message({
-              message: '恭喜你，修改成功',
-              type: 'success'
-            })
-            this.closeDailog()
-          } else {
-            this.$message.error('修改失败，请重试')
-          }
-          this.listPage()
-        }).catch(error => {
-          this.$message.error(error)
-        })
-    },
-    save () {
-      this.$http.post('http://localhost/tbClazz/save', this.tbClazz)
-        .then(response => {
-          if (response.data.code === 200) {
-            this.$message({
-              message: '恭喜你，添加成功',
-              type: 'success'
-            })
-            this.closeDailog()
-          } else {
-            this.$message.error('添加失败，请重试')
-          }
-          this.listPage()
-        }).catch(error => {
-          this.$message.error(error)
-        })
-    },
-    closeDailog () {
-      this.addFlag = false
-      this.editFlag = false
-      this.clearSelect()
-      this.tbClazz = {
-        clId: null,
-        clName: null,
-        clNum: null,
-        clGrade: null,
-        tbSpecialty: {
-          spId: null,
-          spName: null
-        },
-        tbDept: {
-          deId: null,
-          deName: null
-        },
-        tbCollege: {
-          coId: null,
-          coName: null
-        }
-      }
-    },
-    openEditDailog () {
-      if (this.rowData == null) {
-        this.$message.error('请选择要修改的一行数据')
-      } else {
-        this.selectFlag = 'open'
-        this.editFlag = !this.editFlag
-        this.tbClazz = {
-          clId: this.rowData.clId,
-          clName: this.rowData.clName,
-          clNum: this.rowData.clNum,
-          clGrade: this.rowData.clGrade,
+        tbClazz: {
+          clId: null,
+          clName: null,
+          clNum: null,
+          clGrade: null,
           tbSpecialty: {
-            spId: this.rowData.tbSpecialty.spId,
-            spName: this.rowData.tbSpecialty.spName
+            spId: null,
+            spName: null
           },
           tbDept: {
-            deId: this.rowData.tbDept.deId,
-            deName: this.rowData.tbDept.deName
+            deId: null,
+            deName: null
           },
           tbCollege: {
-            coId: this.rowData.tbCollege.coId,
-            coName: this.rowData.tbCollege.coName
-          }
+            coId: null,
+            coName: null
+          },
+          
+        },
+        rowData: null,
+        addFlag: false,
+        editFlag: false,
+        options: [],
+        tbCollege: [],
+        tbDept: [],
+        tbSpecialty: [],
+        select1: null,
+        select2: null,
+        selectFlag: 'open',
+        isAdmin: false,
+        rules: {
+          clName: [{
+            required: true,
+            message: '请输入班级名称',
+            trigger: 'blur'
+          }],
+          clNum: [{
+            required: true,
+            message: '请输入班级编号',
+            trigger: 'blur'
+          }],
+          clGrade: [{
+            required: true,
+            message: '请输入年级',
+            trigger: 'blur'
+          }]
         }
-        this.getSelectCollege()
       }
     },
-    openAddDailog () {
-      this.addFlag = !this.addFlag
-      this.getSelectCollege()
-    },
-    selectOneRow (val) {
-      this.rowData = val
-    },
-    handleSizeChange (size) {
-      this.pager.size = size
-      this.listPage()
-    },
-    handleCurrentChange (page) {
-      this.pager.page = page
-      this.listPage()
-    },
-    listPage () {
-      this.$http.get('http://localhost/tbClazz/listPage', {
-        params: {
-          page: this.pager.page,
-          size: this.pager.size,
-          clName: this.pager.clName
+    methods: {
+      clearSelect() {
+        this.tbDept = null
+        this.tbCollege = null
+        this.tbSpecialty = null
+      },
+      getSelectCollege() {
+        this.tbDept = null
+        this.tbSpecialty = null
+        this.$http.get('http://localhost/tbCollege/list')
+          .then(response => {
+            this.tbCollege = response.data.data
+            this.getSelectDept()
+          })
+      },
+      getSelectDept() {
+        this.tbSpecialty = null
+        let coId = this.tbClazz.tbCollege.coId
+        if (this.selectFlag !== 'open') {
+          this.tbClazz.tbDept.deId = null
         }
-      }).then(response => {
-        this.pager.total = response.data.data.total
-        this.tableData = response.data.data.rows
-      }).catch(error => {
-        this.$message.error(error)
-      })
-    }
-  },
-  mounted () {
-    this.listPage()
-  }
+        this.$http.get('http://localhost/tbDept/getDeptName?coId=' + coId)
+          .then(response => {
+            this.tbDept = response.data.data
+            this.getSelectSpecialty()
+          })
+      },
+      getSelectSpecialty() {
+        let deId = this.tbClazz.tbDept.deId
+        if (this.selectFlag !== 'open') {
+          this.tbClazz.tbSpecialty.spId = null
+        }
+        this.selectFlag = 'no'
+        this.$http.get('http://localhost/tbSpecialty/getSpecialtyNames?deId=' + deId)
+          .then(response => {
+            this.tbSpecialty = response.data.data
+          })
+      },
 
-}
+      remove() {
+        if (this.rowData == null) {
+          this.$message.error('请选择要删除的一行数据')
+        } else {
+          this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            let clId = this.rowData.clId
+            this.$http.post('http://localhost/tbClazz/remove?clId=' + clId)
+              .then(response => {
+                if (response.data.code === 200) {
+                  this.$message({
+                    message: '恭喜你，删除成功',
+                    type: 'success'
+                  })
+                  this.closeDailog()
+                } else {
+                  this.$message.error('删除失败，请重试')
+                }
+                this.listPage()
+              }).catch(error => {
+                this.$message.error(error)
+              })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
+            })
+          })
+        }
+      },
+      update() {
+        this.$http.post('http://localhost/tbClazz/update', this.tbClazz)
+          .then(response => {
+            if (response.data.code === 200) {
+              this.$message({
+                message: '恭喜你，修改成功',
+                type: 'success'
+              })
+              this.closeDailog()
+            } else {
+              this.$message.error('修改失败，请重试')
+            }
+            this.listPage()
+          }).catch(error => {
+            this.$message.error(error)
+          })
+      },
+      save() {
+        this.$http.post('http://localhost/tbClazz/save', this.tbClazz)
+          .then(response => {
+            if (response.data.code === 200) {
+              this.$message({
+                message: '恭喜你，添加成功',
+                type: 'success'
+              })
+              this.closeDailog()
+            } else {
+              this.$message.error('添加失败，请重试')
+            }
+            this.listPage()
+          }).catch(error => {
+            this.$message.error(error)
+          })
+      },
+      closeDailog() {
+        this.addFlag = false
+        this.editFlag = false
+        this.clearSelect()
+        this.tbClazz = {
+          clId: null,
+          clName: null,
+          clNum: null,
+          clGrade: null,
+          tbSpecialty: {
+            spId: null,
+            spName: null
+          },
+          tbDept: {
+            deId: null,
+            deName: null
+          },
+          tbCollege: {
+            coId: null,
+            coName: null
+          }
+        }
+      },
+      openEditDailog() {
+        if (this.rowData == null) {
+          this.$message.error('请选择要修改的一行数据')
+        } else {
+          this.selectFlag = 'open'
+          this.editFlag = !this.editFlag
+          this.tbClazz = {
+            clId: this.rowData.clId,
+            clName: this.rowData.clName,
+            clNum: this.rowData.clNum,
+            clGrade: this.rowData.clGrade,
+            tbSpecialty: {
+              spId: this.rowData.tbSpecialty.spId,
+              spName: this.rowData.tbSpecialty.spName
+            },
+            tbDept: {
+              deId: this.rowData.tbDept.deId,
+              deName: this.rowData.tbDept.deName
+            },
+            tbCollege: {
+              coId: this.rowData.tbCollege.coId,
+              coName: this.rowData.tbCollege.coName
+            }
+
+          }
+          this.getSelectCollege()
+        }
+      },
+      openAddDailog() {
+        this.addFlag = !this.addFlag
+        this.getSelectCollege()
+      },
+      selectOneRow(val) {
+        this.rowData = val
+      },
+      handleSizeChange(size) {
+        this.pager.size = size
+        this.listPage()
+      },
+      handleCurrentChange(page) {
+        this.pager.page = page
+        this.listPage()
+      },
+      listPage() {
+        this.$http.get('http://localhost/tbClazz/listPage', {
+          params: {
+            page: this.pager.page,
+            size: this.pager.size,
+            clName: this.pager.clName
+          }
+        }).then(response => {
+          this.pager.total = response.data.data.total
+          this.tableData = response.data.data.rows
+        }).catch(error => {
+          this.$message.error(error)
+        })
+      },
+      isAdminUser() {
+        let userInfo = JSON.parse(sessionStorage.getItem('user'))
+        if (userInfo.uname === 'admin') {
+          this.isAdmin = true
+        }
+      }
+    },
+    mounted() {
+      this.listPage()
+      this.isAdminUser()
+    }
+
+  }
 </script>
 
 <style>

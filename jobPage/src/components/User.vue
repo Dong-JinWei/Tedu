@@ -17,8 +17,10 @@
             clearable>
           </el-input>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="2">
           <el-button plain icon="el-icon-search"></el-button>
+        </el-col>
+        <el-col :span="6" v-if="isAdmin">
           <el-button plain icon="el-icon-plus" @click="openAddDailog()"></el-button>
           <el-button plain icon="el-icon-edit" @click="openEditDailog()"></el-button>
           <el-button plain icon="el-icon-delete" @click="remove()"></el-button>
@@ -49,19 +51,19 @@
     </el-card>
     <!-- 添加对话框 -->
     <el-dialog title="添加用户" :visible.sync="addFlag" destroy-on-close>
-      <el-form>
+      <el-form :model="tbUser" :rules="rules" ref="tbUser">
         <el-row :gutter="10">
-          <el-form-item label="用户名称">
+          <el-form-item label="用户名称" prop="uname">
             <el-input v-model="tbUser.uname"></el-input>
           </el-form-item>
         </el-row>
         <el-row :gutter="10">
-          <el-form-item label="用户密码">
+          <el-form-item label="用户密码" prop="upassword">
             <el-input v-model="tbUser.upassword"></el-input>
           </el-form-item>
         </el-row>
         <el-row :gutter="10">
-          <el-form-item label="用户邮箱">
+          <el-form-item label="用户邮箱" prop="uemail">
             <el-input v-model="tbUser.uemail"></el-input>
           </el-form-item>
         </el-row>
@@ -73,23 +75,23 @@
     </el-dialog>
     <!-- 修改对话框-->
     <el-dialog title="修改学校" :visible.sync="editFlag" destroy-on-close>
-     <el-form>
-       <el-row :gutter="10">
-         <el-form-item label="用户名称">
-           <el-input v-model="tbUser.uname"></el-input>
-         </el-form-item>
-       </el-row>
-       <el-row :gutter="10">
-         <el-form-item label="用户密码">
-           <el-input v-model="tbUser.upassword"></el-input>
-         </el-form-item>
-       </el-row>
-       <el-row :gutter="10">
-         <el-form-item label="用户邮箱">
-           <el-input v-model="tbUser.uemail"></el-input>
-         </el-form-item>
-       </el-row>
-     </el-form>
+      <el-form :model="tbUser" :rules="rules" ref="tbUser">
+        <el-row :gutter="10">
+          <el-form-item label="用户名称" prop="uname">
+            <el-input v-model="tbUser.uname"></el-input>
+          </el-form-item>
+        </el-row>
+        <el-row :gutter="10">
+          <el-form-item label="用户密码" prop="upassword">
+            <el-input v-model="tbUser.upassword"></el-input>
+          </el-form-item>
+        </el-row>
+        <el-row :gutter="10">
+          <el-form-item label="用户邮箱" prop="uemail">
+            <el-input v-model="tbUser.uemail"></el-input>
+          </el-form-item>
+        </el-row>
+      </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeDailog">取 消</el-button>
         <el-button type="primary" @click="update()">确 定</el-button>
@@ -119,7 +121,26 @@ export default {
       rowData: null,
       addFlag: false,
       editFlag: false,
-      options: []
+      options: [],
+      isAdmin: false,
+      rules: {
+        uname: [{
+          required: true,
+          message: '请输入用户名称',
+          trigger: 'blur'
+        }],
+        upassword: [{
+          required: true,
+          message: '请输入用户密码',
+          trigger: 'blur'
+        }],
+        uemail: [{
+          required: true,
+          message: '请检查你的邮箱',
+          trigger: 'blur',
+          type: 'email'
+        }]
+      }
     }
   },
   methods: {
@@ -242,10 +263,17 @@ export default {
       }).catch(error => {
         this.$message.error(error)
       })
+    },
+    isAdminUser () {
+      let userInfo = JSON.parse(sessionStorage.getItem('user'))
+      if (userInfo.uname === 'admin') {
+        this.isAdmin = true
+      }
     }
   },
   mounted () {
     this.listPage()
+    this.isAdminUser()
   }
 
 }

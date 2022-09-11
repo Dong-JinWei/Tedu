@@ -17,8 +17,10 @@
             clearable>
           </el-input>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="2">
           <el-button plain icon="el-icon-search"></el-button>
+          </el-col>
+          <el-col :span="4" v-if="isAdmin">
           <el-button plain icon="el-icon-plus" @click="openAddDailog()"></el-button>
           <el-button plain icon="el-icon-edit" @click="openEditDailog()"></el-button>
           <el-button plain icon="el-icon-delete" @click="remove()"></el-button>
@@ -125,7 +127,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="院系">
+            <el-form-item label="班级">
               <el-select style="width: 100%;" v-model="tbStudent.tbClazz.clId" placeholder="请选择班级">
                 <el-option v-for="item in tbClazz" :label="item.clName" :value="item.clId"></el-option>
               </el-select>
@@ -208,7 +210,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="院系">
+            <el-form-item label="班级">
               <el-select style="width: 100%;" v-model="tbStudent.tbClazz.clId" placeholder="请选择班级">
                 <el-option v-for="item in tbClazz" :label="item.clName" :value="item.clId"></el-option>
               </el-select>
@@ -276,7 +278,8 @@ export default {
       tbClazz: [],
       select1: null,
       select2: null,
-      selectFlag: 'open'
+      selectFlag: 'open',
+      isAdmin: false
     }
   },
   methods: {
@@ -492,10 +495,17 @@ export default {
       }).catch(error => {
         this.$message.error(error)
       })
+    },
+    isAdminUser () {
+      let userInfo = JSON.parse(sessionStorage.getItem('user'))
+      if (userInfo.uname === 'admin') {
+        this.isAdmin = true
+      }
     }
   },
   mounted () {
     this.listPage()
+    this.isAdminUser()
   }
 
 }

@@ -36,10 +36,11 @@
               <template slot="title">用户信息管理</template>
               <el-menu-item index="/user">用户信息</el-menu-item>
             </el-submenu>
-            <el-menu-item id="info" index="6">
+            <el-menu-item id="info" @click="logout">
+                当前用户：<el-tag size="medium">{{uname}}</el-tag>
+              </el-popconfirm>
 
-              当前登陆用户：<el-tag size="medium">{{uname}}</el-tag>
-            </el-menu-item>
+</el-menu-item>
           </el-menu>
         </div>
         <!-- </el-col> -->
@@ -71,6 +72,12 @@ export default {
     show () {
       let userInfo = JSON.parse(sessionStorage.getItem('user'))
       this.uname = userInfo.uname
+    },
+    logout () {
+      // 清空token
+      window.sessionStorage.clear()
+      // 跳转到登录页
+      this.$router.push('/login')
     }
   },
   mounted () {

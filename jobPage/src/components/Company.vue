@@ -13,12 +13,14 @@
 
       <el-row :gutter="10">
         <el-col :span="6">
-          <el-input placeholder="根据区域或省份名称搜索" prefix-icon="el-icon-search" v-model="pager.cpName" @change="listPage()"
+          <el-input placeholder="输入公司名搜索" prefix-icon="el-icon-search" v-model="pager.cpName" @change="listPage()"
             clearable>
           </el-input>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="2">
           <el-button plain icon="el-icon-search"></el-button>
+        </el-col>
+        <el-col :span="4" v-if="isAdmin">
           <el-button plain icon="el-icon-plus" @click="openAddDailog()"></el-button>
           <el-button plain icon="el-icon-edit" @click="openEditDailog()"></el-button>
           <el-button plain icon="el-icon-delete" @click="remove()"></el-button>
@@ -63,15 +65,15 @@
     </el-card>
     <!-- 添加对话框 -->
     <el-dialog title="添加企业" :visible.sync="addFlag" destroy-on-close>
-      <el-form>
+      <el-form :model="tbCompany" :rules="rules" ref="tbCompany">
         <el-row :gutter="10">
           <el-col :span="12">
-            <el-form-item label="企业名称">
+            <el-form-item label="企业名称" prop="cpName">
               <el-input v-model="tbCompany.cpName"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="企业描述">
+            <el-form-item label="企业描述" prop="cpDesc">
               <el-input v-model="tbCompany.cpDesc"></el-input>
             </el-form-item>
           </el-col>
@@ -84,7 +86,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="所在地址">
+            <el-form-item label="所在地址" prop="cpAddr">
               <el-input v-model="tbCompany.cpAddr"></el-input>
             </el-form-item>
           </el-col>
@@ -97,15 +99,15 @@
     </el-dialog>
     <!-- 修改对话框 -->
     <el-dialog title="修改企业" :visible.sync="editFlag" destroy-on-close>
-      <el-form>
+      <el-form :model="tbCompany" :rules="rules" ref="tbCompany">
         <el-row :gutter="10">
           <el-col :span="12">
-            <el-form-item label="企业名称">
+            <el-form-item label="企业名称" prop="cpName">
               <el-input v-model="tbCompany.cpName"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="企业描述">
+            <el-form-item label="企业描述" prop="cpDesc">
               <el-input v-model="tbCompany.cpDesc"></el-input>
             </el-form-item>
           </el-col>
@@ -118,7 +120,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="所在地址">
+            <el-form-item label="所在地址" prop="cpAddr">
               <el-input v-model="tbCompany.cpAddr"></el-input>
             </el-form-item>
           </el-col>
@@ -160,7 +162,24 @@ export default {
       rowData: null,
       addFlag: false,
       editFlag: false,
-      options: []
+      options: [],
+      rules: {
+        cpName: [{
+          required: true,
+          message: '请输入企业名称',
+          trigger: 'blur'
+        }],
+        cpDesc: [{
+          required: true,
+          message: '请输入描述',
+          trigger: 'blur'
+        }],
+        cpAddr: [{
+          required: true,
+          message: '请输入所在地址',
+          trigger: 'blur'
+        }]
+      }
     }
   },
   methods: {
@@ -305,10 +324,17 @@ export default {
       }).catch(error => {
         this.$message.error(error)
       })
+    },
+    isAdminUser () {
+      let userInfo = JSON.parse(sessionStorage.getItem('user'))
+      if (userInfo.uname === 'admin') {
+        this.isAdmin = true
+      }
     }
   },
   mounted () {
     this.listPage()
+    this.isAdminUser()
   }
 
 }

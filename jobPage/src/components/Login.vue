@@ -13,12 +13,21 @@
           placeholder="请输入密码">
         </el-input>
       </el-form-item>
+      <el-form-item >
+        <el-col :offset="4" :span="6">
+          <el-input style="width: 100px;" v-model="code" @change="checkCaptcha">
+          </el-input>
+        </el-col>
+        <el-col :span="6">
+          <img @click="replace" :src="imgCode" alt="">
+        </el-col>
+      </el-form-item>
       <el-row class="button" :gutter="10">
         <el-col :span="8">
           <el-button type="success" plain @click="login">登录</el-button>
         </el-col>
         <el-col :span="8">
-          <el-button  plain>
+          <el-button plain>
             <a href="#/register" :underline="false">没有账号，点击注册</a>
           </el-button>
         </el-col>
@@ -49,44 +58,61 @@ export default {
         uname: null,
         uemail: null,
         upassword: null
-      }
+      },
+      code: null,
+      imgCode: null
     }
   },
   methods: {
+
+    replace () {
+      const num = Math.ceil(Math.random() * 10)
+      this.imgCode = 'http://localhost:80//getCaptchaImg?id=' + num
+    },
+
     login () {
-      this.$refs['tbUser'].validate((valid) => {
-        if (valid) {
-          this.$http.get('http://localhost:80/tbUser/login', {
-            params: {
-              uName: this.tbUser.uname,
-              uPassword: this.tbUser.upassword
-            }
-          })
-            .then(response => {
-              if (response.data.message === 'no') {
-                this.$message.error('不存在此用户，请检查用户名是否正确')
-              } else if (response.data.message === 'error') {
-                this.$message.error('密码错误，请重新输入')
-              } else {
-                sessionStorage.setItem('user', JSON.stringify(response.data.data))
-                this.$router.push('/welcome')
+      this.$http.get('http://localhost:80/checkCaptcha?code=' + this.code)
+        .then(response => {
+          if (response.data) {
+            this.$refs['tbUser'].validate((valid) => {
+              if (valid) {
+                this.$http.get('http://localhost:80/tbUser/login', {
+                  params: {
+                    uName: this.tbUser.uname,
+                    uPassword: this.tbUser.upassword
+                  }
+                })
+                  .then(response => {
+                    if (response.data.message === 'no') {
+                      this.$message.error('不存在此用户，请检查用户名是否正确')
+                    } else if (response.data.message === 'error') {
+                      this.$message.error('密码错误，请重新输入')
+                    } else {
+                      sessionStorage.setItem('user', JSON.stringify(response.data.data))
+                      this.$router.push('/welcome')
+                    }
+                  })
+                  .catch(e => {
+                    this.$message.error('网络异常，请稍后重试')
+                  })
               }
             })
-            .catch(e => {
-              this.$message.error('网络异常，请稍后重试')
-            })
-        }
-      })
+          } else {
+            this.$message.error('验证码错误，请重试')
+          }
+        })
     }
+  },
+  mounted () {
+    this.replace()
   }
 }
 </script>
 
 <style scoped>
-
-.box-card {
+  .box-card {
     width: 550px;
-    height: 280px;
+    height: 380px;
     border-radius: 10px;
     position: absolute;
     left: 50%;

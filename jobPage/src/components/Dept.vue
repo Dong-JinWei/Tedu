@@ -17,8 +17,10 @@
             clearable>
           </el-input>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="2">
           <el-button plain icon="el-icon-search"></el-button>
+          </el-col>
+          <el-col :span="4" v-if="isAdmin">
           <el-button plain icon="el-icon-plus" @click="openAddDailog()"></el-button>
           <el-button plain icon="el-icon-edit" @click="openEditDailog()"></el-button>
           <el-button plain icon="el-icon-delete" @click="remove()"></el-button>
@@ -49,17 +51,17 @@
     </el-card>
     <!-- 添加对话框 -->
     <el-dialog title="添加企业" :visible.sync="addFlag" destroy-on-close>
-      <el-form>
-        <el-row :gutter="10">
-            <el-form-item label="院系名称">
-              <el-input v-model="tbDept.deName"></el-input>
-            </el-form-item>
-        </el-row>
-        <el-row>
-            <el-form-item label="院系编号">
-              <el-input v-model="tbDept.deNum"></el-input>
-            </el-form-item>
-        </el-row>
+     <el-form :model="tbDept" :rules="rules" ref="tbDept">
+       <el-row :gutter="10">
+           <el-form-item label="院系名称" prop="deName">
+             <el-input v-model="tbDept.deName"></el-input>
+           </el-form-item>
+       </el-row>
+       <el-row>
+           <el-form-item label="院系编号" prop="deNum">
+             <el-input v-model="tbDept.deNum"></el-input>
+           </el-form-item>
+       </el-row>
         <el-row :gutter="10">
             <el-form-item label="所属院校">
               <el-select style="width: 100%;" v-model="tbDept.tbCollege.coId" placeholder="请选择所属院校">
@@ -75,14 +77,14 @@
     </el-dialog>
     <!-- 修改对话框 -->
     <el-dialog title="修改企业" :visible.sync="editFlag" destroy-on-close>
-      <el-form>
+      <el-form :model="tbDept" :rules="rules" ref="tbDept">
         <el-row :gutter="10">
-            <el-form-item label="院系名称">
+            <el-form-item label="院系名称" prop="deName">
               <el-input v-model="tbDept.deName"></el-input>
             </el-form-item>
         </el-row>
         <el-row>
-            <el-form-item label="院系编号">
+            <el-form-item label="院系编号" prop="deNum">
               <el-input v-model="tbDept.deNum"></el-input>
             </el-form-item>
         </el-row>
@@ -127,7 +129,16 @@ export default {
       addFlag: false,
       editFlag: false,
       options: [],
-      tbCollege: []
+      tbCollege: [],
+      isAdmin: false,
+      rules: {
+        deName: [
+          { required: true, message: '请输入院系名称', trigger: 'blur' }
+        ],
+        deNum: [
+          { required: true, message: '请输入院系编码', trigger: 'blur' }
+        ]
+      }
     }
   },
   methods: {
@@ -183,21 +194,25 @@ export default {
         })
     },
     save () {
-      this.$http.post('http://localhost/tbDept/save', this.tbDept)
-        .then(response => {
-          if (response.data.code === 200) {
-            this.$message({
-              message: '恭喜你，添加成功',
-              type: 'success'
+      this.$refs['user'].validate((valid) => {
+        if (valid) {
+          this.$http.post('http://localhost/tbDept/save', this.tbDept)
+            .then(response => {
+              if (response.data.code === 200) {
+                this.$message({
+                  message: '恭喜你，添加成功',
+                  type: 'success'
+                })
+                this.closeDailog()
+              } else {
+                this.$message.error('添加失败，请重试')
+              }
+              this.listPage()
+            }).catch(error => {
+              this.$message.error(error)
             })
-            this.closeDailog()
-          } else {
-            this.$message.error('添加失败，请重试')
-          }
-          this.listPage()
-        }).catch(error => {
-          this.$message.error(error)
-        })
+        }
+      })
     },
     closeDailog () {
       this.addFlag = false
@@ -263,10 +278,17 @@ export default {
       }).catch(error => {
         this.$message.error(error)
       })
+    },
+    isAdminUser () {
+      let userInfo = JSON.parse(sessionStorage.getItem('user'))
+      if (userInfo.uname === 'admin') {
+        this.isAdmin = true
+      }
     }
   },
   mounted () {
     this.listPage()
+    this.isAdminUser()
   }
 
 }

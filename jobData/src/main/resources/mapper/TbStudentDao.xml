@@ -82,6 +82,29 @@
             and ts.deleted = 0
         </where>
     </select>
+    <select id="getTop5" resultType="com.job.app.entity.Top5">
+        SELECT ts.s_name,
+               td.di_name,
+               tc.cp_name,
+               tj.j_salary,
+               tc.cp_addr,
+               tr.re_name,
+               tr.re_shortname,
+               tco.co_name
+        FROM tb_job tj
+                 LEFT JOIN tb_student ts ON tj.s_id = ts.s_id
+                 LEFT JOIN tb_company tc ON tj.cp_id = tc.cp_id
+                 LEFT JOIN tb_direction td ON tj.di_id = td.di_id
+                 LEFT JOIN tb_protocol tp ON tj.pro_id = tp.pro_id
+                 LEFT JOIN tb_region tr ON tc.re_id = tr.re_id
+                 LEFT JOIN tb_clazz tcl ON ts.cl_id = tcl.cl_id
+                 LEFT JOIN tb_specialty tsp on tcl.sp_id = tsp.sp_id
+                 LEFT JOIN tb_dept tde on tde.de_id = tsp.de_id
+                 LEFT JOIN tb_college tco on tco.co_id = tde.co_id
+
+        ORDER BY tj.j_salary DESC
+        LIMIT 5
+    </select>
 
 
 </mapper>
