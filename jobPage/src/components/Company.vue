@@ -194,7 +194,7 @@ export default {
           type: 'warning'
         }).then(() => {
           let cpId = this.rowData.cpId
-          this.$http.post('http://localhost/tbCompany/remove?cpId=' + cpId)
+          this.$http.post('http://101.200.147.50/tbCompany/remove?cpId=' + cpId)
             .then(response => {
               if (response.data.code === 200) {
                 this.$message({
@@ -219,7 +219,7 @@ export default {
     },
     update () {
       this.tbCompany.tbRegion.reId = this.tbCompany.tbRegion.reId[1]
-      this.$http.post('http://localhost/tbCompany/update', this.tbCompany)
+      this.$http.post('http://101.200.147.50/tbCompany/update', this.tbCompany)
         .then(response => {
           if (response.data.code === 200) {
             this.$message({
@@ -238,7 +238,7 @@ export default {
     save () {
       this.tbCompany.tbRegion.reId = this.tbCompany.tbRegion.reId[1]
       console.log(this.tbCompany.tbRegion.reId)
-      this.$http.post('http://localhost/tbCompany/save', this.tbCompany)
+      this.$http.post('http://101.200.147.50/tbCompany/save', this.tbCompany)
         .then(response => {
           if (response.data.code === 200) {
             this.$message({
@@ -255,7 +255,7 @@ export default {
         })
     },
     getRegion () {
-      this.$http.get('http://localhost/tbRegion/getRegion')
+      this.$http.get('http://101.200.147.50/tbRegion/getRegion')
         .then(response => {
           this.options = response.data.data
         })
@@ -312,7 +312,7 @@ export default {
       this.listPage()
     },
     listPage () {
-      this.$http.get('http://localhost/tbCompany/listPage', {
+      this.$http.get('http://101.200.147.50/tbCompany/listPage', {
         params: {
           page: this.pager.page,
           size: this.pager.size,

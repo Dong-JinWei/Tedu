@@ -65,7 +65,7 @@
         <el-row :gutter="10">
             <el-form-item label="所属院校">
               <el-select style="width: 100%;" v-model="tbDept.tbCollege.coId" placeholder="请选择所属院校">
-                <el-option v-for="item in tbCollege" :label="item.coName" :value="item.coId"></el-option>
+                <el-option v-for="(item, index) in tbCollege" :key="index" :label="item.coName" :value="item.coId"></el-option>
               </el-select>
             </el-form-item>
         </el-row>
@@ -91,7 +91,7 @@
         <el-row :gutter="10">
             <el-form-item label="所属院校">
               <el-select style="width: 100%;" v-model="tbDept.tbCollege.coId" placeholder="请选择所属院校">
-                <el-option v-for="item in tbCollege" :label="item.coName" :value="item.coId"></el-option>
+                <el-option v-for="(item, index) in tbCollege" :key="index" :label="item.coName" :value="item.coId"></el-option>
               </el-select>
             </el-form-item>
         </el-row>
@@ -153,7 +153,7 @@ export default {
           type: 'warning'
         }).then(() => {
           let deId = this.rowData.deId
-          this.$http.post('http://localhost/tbDept/remove?deId=' + deId)
+          this.$http.post('http://101.200.147.50/tbDept/remove?deId=' + deId)
             .then(response => {
               if (response.data.code === 200) {
                 this.$message({
@@ -177,7 +177,7 @@ export default {
       }
     },
     update () {
-      this.$http.post('http://localhost/tbDept/update', this.tbDept)
+      this.$http.post('http://101.200.147.50/tbDept/update', this.tbDept)
         .then(response => {
           if (response.data.code === 200) {
             this.$message({
@@ -196,7 +196,7 @@ export default {
     save () {
       this.$refs['user'].validate((valid) => {
         if (valid) {
-          this.$http.post('http://localhost/tbDept/save', this.tbDept)
+          this.$http.post('http://101.200.147.50/tbDept/save', this.tbDept)
             .then(response => {
               if (response.data.code === 200) {
                 this.$message({
@@ -245,7 +245,7 @@ export default {
       }
     },
     getCollege () {
-      this.$http.get('http://localhost/tbCollege/list')
+      this.$http.get('http://101.200.147.50/tbCollege/list')
         .then(response => {
           this.tbCollege = response.data.data
         })
@@ -266,7 +266,7 @@ export default {
       this.listPage()
     },
     listPage () {
-      this.$http.get('http://localhost/tbDept/listPage', {
+      this.$http.get('http://101.200.147.50/tbDept/listPage', {
         params: {
           page: this.pager.page,
           size: this.pager.size,

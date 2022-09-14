@@ -24,7 +24,7 @@ import axios from 'axios'
 
 import * as filters from '@/directives/filters'
 
-require('./mock/mock')//是否使用mock
+// require('./mock/mock')//是否使用mock
 Vue.config.productionTip = false;
 // 自定义组件
 Vue.component("Echart",Echart)

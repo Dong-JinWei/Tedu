@@ -37,10 +37,8 @@
               <el-menu-item index="/user">用户信息</el-menu-item>
             </el-submenu>
             <el-menu-item id="info" @click="logout">
-                当前用户：<el-tag size="medium">{{uname}}</el-tag>
-              </el-popconfirm>
-
-</el-menu-item>
+              当前用户：<el-tag size="medium">{{uname}}</el-tag>
+            </el-menu-item>
           </el-menu>
         </div>
         <!-- </el-col> -->

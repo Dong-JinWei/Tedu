@@ -102,7 +102,7 @@ export default {
       this.pageflag = true
       // this.pageflag =false
 
-      this.$http.get('http://localhost/bigData/listJobAll').then(res => {
+      this.$http.get('http://101.200.147.50/bigData/listJobAll').then(res => {
         if (res.code === 200) {
           this.list = res.data
           // this.countUserNumData = 1

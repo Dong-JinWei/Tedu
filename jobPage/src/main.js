@@ -11,16 +11,15 @@ import dataV from '@jiaminghi/data-view'
 import * as echarts from 'echarts'
 
 // 按需引入vue-awesome图标
-import Icon from 'vue-awesome/components/Icon';
-import 'vue-awesome/icons/chart-bar.js';
-import 'vue-awesome/icons/chart-area.js';
-import 'vue-awesome/icons/chart-pie.js';
-import 'vue-awesome/icons/chart-line.js';
-import 'vue-awesome/icons/align-left.js';
+import Icon from 'vue-awesome/components/Icon'
+import 'vue-awesome/icons/chart-bar.js'
+import 'vue-awesome/icons/chart-area.js'
+import 'vue-awesome/icons/chart-pie.js'
+import 'vue-awesome/icons/chart-line.js'
+import 'vue-awesome/icons/align-left.js'
 
 // 全局注册图标
-Vue.component('icon', Icon);
-
+Vue.component('icon', Icon)
 
 Vue.config.productionTip = false
 Vue.use(ElementUI)

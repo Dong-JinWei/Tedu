@@ -87,7 +87,7 @@
           <el-col :span="12">
             <el-form-item label="区域编号">
               <el-select v-model="tbRegion.tbArea.arId" placeholder="请选择所在区域">
-                <el-option v-for="item in tbAreaData" :label="item.arName" :value="item.arId"></el-option>
+                <el-option v-for="(item, index) in tbAreaData" :key="index" :label="item.arName" :value="item.arId"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -136,7 +136,7 @@
           <el-col :span="12">
             <el-form-item label="区域编号">
               <el-select v-model="tbRegion.tbArea.arId" placeholder="请选择所在区域">
-                <el-option v-for="item in tbAreaData" :label="item.arName" :value="item.arId"></el-option>
+                <el-option v-for="(item, index) in tbAreaData" :key="index" :label="item.arName" :value="item.arId"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -210,13 +210,13 @@ export default {
       this.listPage()
     },
     getTbAreaList () {
-      this.$http.get('http://localhost/tbArea/list')
+      this.$http.get('http://101.200.147.50/tbArea/list')
         .then(response => {
           this.tbAreaData = response.data.data
         })
     },
     listPage () {
-      this.$http.get('http://localhost/tbRegion/listPage', {
+      this.$http.get('http://101.200.147.50/tbRegion/listPage', {
         params: {
           page: this.pager.page,
           size: this.pager.size,

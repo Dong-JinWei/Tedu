@@ -67,16 +67,16 @@ export default {
 
     replace () {
       const num = Math.ceil(Math.random() * 10)
-      this.imgCode = 'http://localhost:80//getCaptchaImg?id=' + num
+      this.imgCode = 'http://101.200.147.50:80//getCaptchaImg?id=' + num
     },
 
     login () {
-      this.$http.get('http://localhost:80/checkCaptcha?code=' + this.code)
+      this.$http.get('http://101.200.147.50:80/checkCaptcha?code=' + this.code)
         .then(response => {
           if (response.data) {
             this.$refs['tbUser'].validate((valid) => {
               if (valid) {
-                this.$http.get('http://localhost:80/tbUser/login', {
+                this.$http.get('http://101.200.147.50:80/tbUser/login', {
                   params: {
                     uName: this.tbUser.uname,
                     uPassword: this.tbUser.upassword

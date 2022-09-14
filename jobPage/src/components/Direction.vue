@@ -111,7 +111,7 @@ export default {
           type: 'warning'
         }).then(() => {
           let diId = this.rowData.diId
-          this.$http.post('http://localhost/tbDirection/remove?diId=' + diId)
+          this.$http.post('http://101.200.147.50/tbDirection/remove?diId=' + diId)
             .then(response => {
               if (response.data.code === 200) {
                 this.$message({
@@ -135,7 +135,7 @@ export default {
       }
     },
     update () {
-      this.$http.post('http://localhost/tbDirection/update', this.tbDirection)
+      this.$http.post('http://101.200.147.50/tbDirection/update', this.tbDirection)
         .then(response => {
           if (response.data.code === 200) {
             this.$message({
@@ -152,7 +152,7 @@ export default {
         })
     },
     save () {
-      this.$http.post('http://localhost/tbDirection/save', this.tbDirection)
+      this.$http.post('http://101.200.147.50/tbDirection/save', this.tbDirection)
         .then(response => {
           if (response.data.code === 200) {
             this.$message({
@@ -203,7 +203,7 @@ export default {
       this.listPage()
     },
     listPage () {
-      this.$http.get('http://localhost/tbDirection/listPage', {
+      this.$http.get('http://101.200.147.50/tbDirection/listPage', {
         params: {
           page: this.pager.page,
           size: this.pager.size,

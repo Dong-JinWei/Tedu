@@ -155,7 +155,7 @@ export default {
           type: 'warning'
         }).then(() => {
           let uId = this.rowData.uid
-          this.$http.post('http://localhost/tbUser/remove?uId=' + uId)
+          this.$http.post('http://101.200.147.50/tbUser/remove?uId=' + uId)
             .then(response => {
               if (response.data.code === 200) {
                 this.$message({
@@ -179,7 +179,7 @@ export default {
       }
     },
     update () {
-      this.$http.post('http://localhost/tbUser/update', this.tbUser)
+      this.$http.post('http://101.200.147.50/tbUser/update', this.tbUser)
         .then(response => {
           if (response.data.code === 200) {
             this.$message({
@@ -196,7 +196,7 @@ export default {
         })
     },
     save () {
-      this.$http.post('http://localhost/tbUser/save', this.tbUser)
+      this.$http.post('http://101.200.147.50/tbUser/save', this.tbUser)
         .then(response => {
           if (response.data.code === 200) {
             this.$message({
@@ -251,7 +251,7 @@ export default {
       this.listPage()
     },
     listPage () {
-      this.$http.get('http://localhost/tbUser/listPage', {
+      this.$http.get('http://101.200.147.50/tbUser/listPage', {
         params: {
           page: this.pager.page,
           size: this.pager.size,

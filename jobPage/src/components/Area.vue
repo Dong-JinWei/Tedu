@@ -63,7 +63,7 @@ export default {
   methods: {
 
     listPage () {
-      this.$http.get('http://localhost/tbArea/listPage', {
+      this.$http.get('http://101.200.147.50/tbArea/listPage', {
         params: {
           page: this.pager.page,
           size: this.pager.size,

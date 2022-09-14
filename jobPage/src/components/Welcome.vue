@@ -6,17 +6,17 @@
         <el-card>
           <el-carousel :interval="4000" type="card" height="200px">
             <el-carousel-item>
-              <el-link href="http://localhost:8081" target="_blank">
+              <el-link href="http://101.200.147.50:8081" target="_blank">
                 <img src="../assets/bigdata1.png" />
               </el-link>
             </el-carousel-item>
             <el-carousel-item>
-              <el-link href="http://localhost:8081" target="_blank">
+              <el-link href="http://101.200.147.50:8081" target="_blank">
                 <img src="../assets/bigdata2.png" />
               </el-link>
             </el-carousel-item>
             <el-carousel-item>
-              <el-link href="http://localhost:8081" target="_blank">
+              <el-link href="http://101.200.147.50:8081" target="_blank">
                 <img src="../assets/bigdata3.png" />
               </el-link>
             </el-carousel-item>
@@ -25,22 +25,25 @@
       </el-col>
     </el-row>
 
-<el-card>
-  <div slot="header" class="clearfix">
-    <span>就业薪资榜</span>
-  </div>
-  <el-row :gutter="10">
-    <el-card v-for="item in tableData" shadow="hover">
-      <el-descriptions >
-          <el-descriptions-item label="学生姓名">{{item.sname}}</el-descriptions-item>
-          <el-descriptions-item label="学校">{{item.coName}}</el-descriptions-item>
-          <el-descriptions-item label="薪资">{{item.jsalary}}</el-descriptions-item>
-          <el-descriptions-item label="行业">{{item.diName}}</el-descriptions-item>
-          <el-descriptions-item label="工作地点">{{item.reShortname}} {{item.reName}} {{item.cpAddr}} {{item.cpName}}</el-descriptions-item>
-      </el-descriptions>
+    <el-card>
+     <div slot="header" class="clearfix">
+        <span>就业薪资榜</span>
+      </div>
+      <el-row :gutter="10">
+        <el-card v-for="(item, index) in tableData" :key="index" shadow="hover">
+          <el-descriptions>
+            <el-descriptions-item label="学生姓名">{{item.sname}}</el-descriptions-item>
+            <el-descriptions-item label="学校">{{item.coName}}</el-descriptions-item>
+            <el-descriptions-item label="薪资">{{item.jsalary}}</el-descriptions-item>
+            <el-descriptions-item label="行业">{{item.diName}}</el-descriptions-item>
+            <el-descriptions-item label="工作地点">{{item.reShortname}} {{item.reName}} {{item.cpAddr}}
+              {{item.cpName}}
+            </el-descriptions-item>
+          </el-descriptions>
+        </el-card>
+
+      </el-row>
     </el-card>
-  </el-row>
-</el-card>
 
   </div>
 
@@ -55,7 +58,7 @@ export default {
   },
   methods: {
     getTop5 () {
-      this.$http.get('http://localhost/tbStudent/getTop5')
+      this.$http.get('http://101.200.147.50/tbStudent/getTop5')
         .then(response => {
           if (response.data.code === 200) {
             this.tableData = response.data.data

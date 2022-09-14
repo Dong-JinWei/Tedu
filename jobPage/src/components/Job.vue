@@ -95,7 +95,7 @@
         <el-form-item label="协议文件">
           <el-row>
             <el-col>
-              <el-upload style="margin-bottom: -30px;" drag action="http://localhost/tbJob/upload" multiple>
+              <el-upload style="margin-bottom: -30px;" drag action="http://101.200.147.50/tbJob/upload" multiple>
                 <i class="el-icon-upload"></i>
                 <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
               </el-upload>
@@ -147,7 +147,7 @@
         <el-form-item label="协议文件">
           <el-row>
             <el-col>
-              <el-upload style="margin-bottom: -30px;" drag action="http://localhost/tbJob/upload" multiple>
+              <el-upload style="margin-bottom: -30px;" drag action="http://101.200.147.50/tbJob/upload" multiple>
                 <i class="el-icon-upload"></i>
                 <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
               </el-upload>
@@ -208,19 +208,19 @@ export default {
   },
   methods: {
     getDirection () {
-      this.$http.get('http://localhost/tbDirection/list')
+      this.$http.get('http://101.200.147.50/tbDirection/list')
         .then(response => {
           this.tbDirection = response.data.data
         })
     },
     getCompanyList () {
-      this.$http.get('http://localhost/tbCompany/list')
+      this.$http.get('http://101.200.147.50/tbCompany/list')
         .then(response => {
           this.tbCompany = response.data.data
         })
     },
     getStudentList () {
-      this.$http.get('http://localhost/tbStudent/list')
+      this.$http.get('http://101.200.147.50/tbStudent/list')
         .then(response => {
           this.tbStudent = response.data.data
         })
@@ -236,7 +236,7 @@ export default {
           type: 'warning'
         }).then(() => {
           let jId = this.rowData.jid
-          this.$http.post('http://localhost/tbJob/remove?jId=' + jId)
+          this.$http.post('http://101.200.147.50/tbJob/remove?jId=' + jId)
             .then(response => {
               if (response.data.code === 200) {
                 this.$message({
@@ -260,7 +260,7 @@ export default {
       }
     },
     update () {
-      this.$http.post('http://localhost/tbJob/update', this.tbJob)
+      this.$http.post('http://101.200.147.50/tbJob/update', this.tbJob)
         .then(response => {
           if (response.data.code === 200) {
             this.$message({
@@ -277,7 +277,7 @@ export default {
         })
     },
     save () {
-      this.$http.post('http://localhost/tbJob/save', this.tbJob)
+      this.$http.post('http://101.200.147.50/tbJob/save', this.tbJob)
         .then(response => {
           if (response.data.code === 200) {
             this.$message({
@@ -365,7 +365,7 @@ export default {
       this.listPage()
     },
     listPage () {
-      this.$http.get('http://localhost/tbJob/listPage', {
+      this.$http.get('http://101.200.147.50/tbJob/listPage', {
         params: {
           page: this.pager.page,
           size: this.pager.size,

@@ -117,7 +117,7 @@ export default {
     getData () {
       this.pageflag = true
 
-      this.$http.get('http://localhost/bigData/userOverview').then(res => {
+      this.$http.get('http://101.200.147.50/bigData/userOverview').then(res => {
         if (res.code === 200) {
           this.userOverview = res.data
           this.onlineconfig = {

@@ -179,7 +179,7 @@ export default {
           type: 'warning'
         }).then(() => {
           let coId = this.rowData.coId
-          this.$http.post('http://localhost/tbCollege/remove?coId=' + coId)
+          this.$http.post('http://101.200.147.50/tbCollege/remove?coId=' + coId)
             .then(response => {
               if (response.data.code === 200) {
                 this.$message({
@@ -203,7 +203,7 @@ export default {
       }
     },
     update () {
-      this.$http.post('http://localhost/tbCollege/update', this.tbCollage)
+      this.$http.post('http://101.200.147.50/tbCollege/update', this.tbCollage)
         .then(response => {
           if (response.data.code === 200) {
             this.$message({
@@ -222,7 +222,7 @@ export default {
     save () {
       this.$refs['user'].validate((valid) => {
         if (valid) {
-          this.$http.post('http://localhost/tbCollege/save', this.tbCollage)
+          this.$http.post('http://101.200.147.50/tbCollege/save', this.tbCollage)
             .then(response => {
               if (response.data.code === 200) {
                 this.$message({
@@ -281,7 +281,7 @@ export default {
       this.listPage()
     },
     listPage () {
-      this.$http.get('http://localhost/tbCollege/listPage', {
+      this.$http.get('http://101.200.147.50/tbCollege/listPage', {
         params: {
           page: this.pager.page,
           size: this.pager.size,

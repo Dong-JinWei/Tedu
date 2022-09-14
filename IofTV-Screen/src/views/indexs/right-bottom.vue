@@ -96,7 +96,7 @@ export default {
     getData () {
       this.pageflag = true
       // this.pageflag =false
-      this.$http.get('http://localhost/bigData/listStudentInfo').then(res => {
+      this.$http.get('http://101.200.147.50/bigData/listStudentInfo').then(res => {
         if (res.code === 200) {
           this.list = res.data
           let timer = setTimeout(() => {

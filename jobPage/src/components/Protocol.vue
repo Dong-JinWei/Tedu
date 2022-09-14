@@ -77,7 +77,7 @@ export default {
       this.listPage()
     },
     listPage () {
-      this.$http.get('http://localhost/tbProtocol/listPage', {
+      this.$http.get('http://101.200.147.50/tbProtocol/listPage', {
         params: {
           page: this.pager.page,
           size: this.pager.size,

@@ -93,7 +93,7 @@
           </el-col>
         </el-row>
         <el-form-item label="学生照片">
-          <el-upload t class="avatar-uploader" action="http://localhost/tbStudent/getImagesUrl" :data="tbStudent"
+          <el-upload t class="avatar-uploader" action="http://101.200.147.50/tbStudent/getImagesUrl" :data="tbStudent"
             :on-success="handleAvatarSuccess" :show-file-list="false">
             <img v-if="tbStudent.sphoto" :src="tbStudent.sphoto" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -104,7 +104,7 @@
             <el-form-item label="院校">
               <el-select @change="getSelectDept()" style="width: 100%;" v-model="tbStudent.tbCollege.coId"
                 placeholder="请选择所属院校">
-                <el-option v-for="item in tbCollege" :label="item.coName" :value="item.coId"></el-option>
+                <el-option v-for="(item, index) in tbCollege" :key="index" :label="item.coName" :value="item.coId"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -112,7 +112,7 @@
             <el-form-item label="院系">
               <el-select @change="getSelectSpecialty()" style="width: 100%;" v-model="tbStudent.tbDept.deId"
                 placeholder="请选择院系">
-                <el-option v-for="item in tbDept" :label="item.deName" :value="item.deId"></el-option>
+                <el-option v-for="(item, index) in tbDept" :key="index" :label="item.deName" :value="item.deId"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -122,14 +122,14 @@
             <el-form-item label="专业">
               <el-select @change="getSelectClazz()" style="width: 100%;" v-model="tbStudent.tbSpecialty.spId"
                 placeholder="请选择专业">
-                <el-option v-for="item in tbSpecialty" :label="item.spName" :value="item.spId"></el-option>
+                <el-option v-for="(item, index) in tbSpecialty" :key="index" :label="item.spName" :value="item.spId"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="班级">
               <el-select style="width: 100%;" v-model="tbStudent.tbClazz.clId" placeholder="请选择班级">
-                <el-option v-for="item in tbClazz" :label="item.clName" :value="item.clId"></el-option>
+                <el-option v-for="(item, index) in tbClazz" :key="index" :label="item.clName" :value="item.clId"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -173,50 +173,46 @@
           </el-col>
         </el-row>
         <el-form-item label="学生照片">
-          <el-upload t class="avatar-uploader" action="http://localhost/tbStudent/uploadImages" :data="tbStudent"
+          <el-upload t class="avatar-uploader" action="http://101.200.147.50/tbStudent/getImagesUrl" :data="tbStudent"
             :on-success="handleAvatarSuccess" :show-file-list="false">
             <img v-if="tbStudent.sphoto" :src="tbStudent.sphoto" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
         </el-form-item>
-
         <el-row :gutter="10">
           <el-col :span="12">
             <el-form-item label="院校">
               <el-select @change="getSelectDept()" style="width: 100%;" v-model="tbStudent.tbCollege.coId"
                 placeholder="请选择所属院校">
-                <el-option v-for="item in tbCollege" :label="item.coName" :value="item.coId"></el-option>
+                <el-option v-for="(item, index) in tbCollege" :key="index" :label="item.coName" :value="item.coId"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
-
           <el-col :span="12">
             <el-form-item label="院系">
               <el-select @change="getSelectSpecialty()" style="width: 100%;" v-model="tbStudent.tbDept.deId"
                 placeholder="请选择院系">
-                <el-option v-for="item in tbDept" :label="item.deName" :value="item.deId"></el-option>
+                <el-option v-for="(item, index) in tbDept" :key="index" :label="item.deName" :value="item.deId"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
-
         </el-row>
         <el-row :gutter="10">
           <el-col :span="12">
             <el-form-item label="专业">
               <el-select @change="getSelectClazz()" style="width: 100%;" v-model="tbStudent.tbSpecialty.spId"
                 placeholder="请选择专业">
-                <el-option v-for="item in tbSpecialty" :label="item.spName" :value="item.spId"></el-option>
+                <el-option v-for="(item, index) in tbSpecialty" :key="index" :label="item.spName" :value="item.spId"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="班级">
               <el-select style="width: 100%;" v-model="tbStudent.tbClazz.clId" placeholder="请选择班级">
-                <el-option v-for="item in tbClazz" :label="item.clName" :value="item.clId"></el-option>
+                <el-option v-for="(item, index) in tbClazz" :key="index" :label="item.clName" :value="item.clId"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
-
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -296,7 +292,7 @@ export default {
     getSelectCollege () {
       this.tbDept = null
       this.tbSpecialty = null
-      this.$http.get('http://localhost/tbCollege/list')
+      this.$http.get('http://101.200.147.50/tbCollege/list')
         .then(response => {
           this.tbCollege = response.data.data
           this.getSelectDept()
@@ -309,7 +305,7 @@ export default {
       if (this.selectFlag !== 'open') {
         this.tbStudent.tbDept.deId = null
       }
-      this.$http.get('http://localhost/tbDept/getDeptName?coId=' + coId)
+      this.$http.get('http://101.200.147.50/tbDept/getDeptName?coId=' + coId)
         .then(response => {
           this.tbDept = response.data.data
           this.getSelectSpecialty()
@@ -320,7 +316,7 @@ export default {
       if (this.selectFlag !== 'open') {
         this.tbStudent.tbSpecialty.spId = null
       }
-      this.$http.get('http://localhost/tbSpecialty/getSpecialtyNames?deId=' + deId)
+      this.$http.get('http://101.200.147.50/tbSpecialty/getSpecialtyNames?deId=' + deId)
         .then(response => {
           this.tbSpecialty = response.data.data
           this.getSelectClazz()
@@ -331,7 +327,7 @@ export default {
       if (this.selectFlag !== 'open') {
         this.tbStudent.tbClazz.clId = null
       }
-      this.$http.get('http://localhost/tbClazz/getClazzNames?spId=' + spId)
+      this.$http.get('http://101.200.147.50/tbClazz/getClazzNames?spId=' + spId)
         .then(response => {
           this.tbClazz = response.data.data
           this.selectFlag = 'no'
@@ -348,7 +344,7 @@ export default {
           type: 'warning'
         }).then(() => {
           let sId = this.rowData.sid
-          this.$http.post('http://localhost/tbStudent/remove?sId=' + sId)
+          this.$http.post('http://101.200.147.50/tbStudent/remove?sId=' + sId)
             .then(response => {
               if (response.data.code === 200) {
                 this.$message({
@@ -372,7 +368,7 @@ export default {
       }
     },
     update () {
-      this.$http.post('http://localhost/tbStudent/update', this.tbStudent)
+      this.$http.post('http://101.200.147.50/tbStudent/update', this.tbStudent)
         .then(response => {
           if (response.data.code === 200) {
             this.$message({
@@ -389,7 +385,7 @@ export default {
         })
     },
     save () {
-      this.$http.post('http://localhost/tbStudent/save', this.tbStudent)
+      this.$http.post('http://101.200.147.50/tbStudent/save', this.tbStudent)
         .then(response => {
           if (response.data.code === 200) {
             this.$message({
@@ -483,7 +479,7 @@ export default {
       this.listPage()
     },
     listPage () {
-      this.$http.get('http://localhost/tbStudent/listPage', {
+      this.$http.get('http://101.200.147.50/tbStudent/listPage', {
         params: {
           page: this.pager.page,
           size: this.pager.size,

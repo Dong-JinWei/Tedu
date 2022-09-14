@@ -64,7 +64,7 @@ export default {
     register () {
       this.$refs['tbUser'].validate((valid) => {
         if (valid) {
-          this.$http.post('http://localhost:80/tbUser/register', this.tbUser)
+          this.$http.post('http://101.200.147.50:80/tbUser/register', this.tbUser)
             .then(response => {
               if (response.data.message === 'has') {
                 this.$message.error('用户名被使用！')
