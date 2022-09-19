@@ -8,23 +8,6 @@
         <result property="arDesc" column="ar_desc" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <!-- 批量插入 -->
-    <insert id="insertBatch" keyProperty="arId" useGeneratedKeys="true">
-        insert into ceap.tb_area(ar_name, ar_desc)
-        values
-        <foreach collection="entities" item="entity" separator=",">
-        (#{entity.arName}, #{entity.arDesc})
-        </foreach>
-    </insert>
-    <!-- 批量插入或按主键更新 -->
-    <insert id="insertOrUpdateBatch" keyProperty="arId" useGeneratedKeys="true">
-        insert into ceap.tb_area(ar_name, ar_desc)
-        values
-        <foreach collection="entities" item="entity" separator=",">
-            (#{entity.arName}, #{entity.arDesc})
-        </foreach>
-        on duplicate key update
-         ar_name = values(ar_name) , ar_desc = values(ar_desc)     </insert>
 
 </mapper>
 

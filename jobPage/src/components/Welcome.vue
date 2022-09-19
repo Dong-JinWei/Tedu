@@ -6,17 +6,17 @@
         <el-card>
           <el-carousel :interval="4000" type="card" height="200px">
             <el-carousel-item>
-              <el-link href="http://101.200.147.50:8081" target="_blank">
+              <el-link href="http://localhost:8081" target="_blank">
                 <img src="../assets/bigdata1.png" />
               </el-link>
             </el-carousel-item>
             <el-carousel-item>
-              <el-link href="http://101.200.147.50:8081" target="_blank">
+              <el-link href="http://localhost:8081" target="_blank">
                 <img src="../assets/bigdata2.png" />
               </el-link>
             </el-carousel-item>
             <el-carousel-item>
-              <el-link href="http://101.200.147.50:8081" target="_blank">
+              <el-link href="http://localhost:8081" target="_blank">
                 <img src="../assets/bigdata3.png" />
               </el-link>
             </el-carousel-item>

@@ -63,7 +63,7 @@
         <el-row :gutter="10">
           <el-form-item label="所属院系">
             <el-form-item label="所属院系">
-              <el-select @change="getSelectDept()" style="width: 100%;" v-model="select1" placeholder="请选择所属院校">
+              <el-select @change="getSelectDept()" style="width: 100%;" v-model="tbSpecialty.tbCollege.coId" placeholder="请选择所属院校">
                 <el-option v-for="(item, index) in tbCollege" :key="index" :label="item.coName" :value="item.coId"></el-option>
               </el-select>
               <el-select style="width: 100%;" v-model="tbSpecialty.tbDept.deId" placeholder="请选择所属院校">
@@ -182,6 +182,8 @@ export default {
       }
       this.selectFlag = 'no'
       let coId = this.tbSpecialty.tbCollege.coId
+      console.log(this.tbSpecialty)
+      console.log(coId)
       this.$http.get('http://101.200.147.50/tbDept/getDeptName?coId=' + coId)
         .then(response => {
           this.tbDept = response.data.data

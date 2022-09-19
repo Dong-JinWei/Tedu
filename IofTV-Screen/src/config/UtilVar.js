@@ -19,7 +19,6 @@ const runtimeType = {
     },
     //开发环境
     development: () => {
-      
     },
     
 }

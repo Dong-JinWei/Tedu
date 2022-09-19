@@ -1,10 +1,10 @@
 server:
-  port: 8999
+  port: 80
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql:///ceap
-    url: jdbc:mysql://101.200.147.50:3306/ceap
+    url: jdbc:mysql:///ceap
+#    url: jdbc:mysql://101.200.147.50:3306/ceap
     username: root
     password: root123
     type: com.alibaba.druid.pool.DruidDataSource

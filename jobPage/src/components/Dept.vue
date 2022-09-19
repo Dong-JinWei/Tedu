@@ -194,7 +194,7 @@ export default {
         })
     },
     save () {
-      this.$refs['user'].validate((valid) => {
+      this.$refs['tbDept'].validate((valid) => {
         if (valid) {
           this.$http.post('http://101.200.147.50/tbDept/save', this.tbDept)
             .then(response => {

@@ -42,7 +42,8 @@
         </el-table-column>
         <el-table-column prop="sphoto" label="学生照片">
           <template slot-scope="scope">
-            <el-avatar shape="square" :size="50" :src="scope.row.sphoto"></el-avatar>
+            <!-- <el-avatar shape="square" :size="60" :src="scope.row.sphoto"></el-avatar> -->
+            <img  style="width: 55px; height: 55px;border-radius:5px" :src="scope.row.sphoto"/>
           </template>
         </el-table-column>
         <el-table-column prop="tbClazz.clName" label="所属班级">
@@ -173,7 +174,7 @@
           </el-col>
         </el-row>
         <el-form-item label="学生照片">
-          <el-upload t class="avatar-uploader" action="http://101.200.147.50/tbStudent/getImagesUrl" :data="tbStudent"
+          <el-upload t class="avatar-uploader" action="http://101.200.147.50/tbStudent/uploadImages" :data="tbStudent"
             :on-success="handleAvatarSuccess" :show-file-list="false">
             <img v-if="tbStudent.sphoto" :src="tbStudent.sphoto" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -292,10 +293,14 @@ export default {
     getSelectCollege () {
       this.tbDept = null
       this.tbSpecialty = null
+      this.tbClazz = null
       this.$http.get('http://101.200.147.50/tbCollege/list')
         .then(response => {
           this.tbCollege = response.data.data
           this.getSelectDept()
+        })
+        .catch(e => {
+          console.log(e)
         })
     },
     getSelectDept () {
@@ -304,33 +309,47 @@ export default {
       let coId = this.tbStudent.tbCollege.coId
       if (this.selectFlag !== 'open') {
         this.tbStudent.tbDept.deId = null
+        this.tbStudent.tbSpecialty.spId = null
+        this.tbStudent.tbClazz.clId = null
       }
       this.$http.get('http://101.200.147.50/tbDept/getDeptName?coId=' + coId)
         .then(response => {
           this.tbDept = response.data.data
           this.getSelectSpecialty()
         })
+        .catch(e => {
+          console.log(e)
+        })
     },
     getSelectSpecialty () {
+      this.tbClazz = null
       let deId = this.tbStudent.tbDept.deId
       if (this.selectFlag !== 'open') {
         this.tbStudent.tbSpecialty.spId = null
+        this.tbStudent.tbClazz.clId = null
       }
       this.$http.get('http://101.200.147.50/tbSpecialty/getSpecialtyNames?deId=' + deId)
         .then(response => {
           this.tbSpecialty = response.data.data
           this.getSelectClazz()
         })
+        .catch(e => {
+          console.log(e)
+        })
     },
     getSelectClazz () {
       let spId = this.tbStudent.tbSpecialty.spId
+      console.log(this.selectFlag !== 'open')
       if (this.selectFlag !== 'open') {
         this.tbStudent.tbClazz.clId = null
       }
+      this.selectFlag = 'no'
       this.$http.get('http://101.200.147.50/tbClazz/getClazzNames?spId=' + spId)
         .then(response => {
           this.tbClazz = response.data.data
-          this.selectFlag = 'no'
+        })
+        .catch(e => {
+          console.log(e)
         })
     },
 
@@ -508,34 +527,5 @@ export default {
 </script>
 
 <style>
-  .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-
-  .avatar-uploader-icon {
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-  }
-
-  .avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
-  }
-  .el-form-item{
-      margin-bottom: 0px;
-  }
 
 </style>

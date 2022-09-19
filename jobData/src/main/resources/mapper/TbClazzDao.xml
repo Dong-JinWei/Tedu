@@ -67,7 +67,7 @@
         select *
         from tb_clazz tc
                  LEFT JOIN tb_specialty ts on tc.sp_id = ts.sp_id
-        where ts.sp_id = #{spId} and ts.deleted = 0
+        where ts.sp_id = #{spId} and tc.deleted = 0
     </select>
 
 

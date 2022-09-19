@@ -118,6 +118,7 @@ module.exports = {
 
 	devServer: {
 		// 配置多个代理
+		port: 8081,
 	},
 	pluginOptions: {}
 }

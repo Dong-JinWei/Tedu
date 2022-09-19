@@ -71,10 +71,12 @@
         </el-row>
         <el-row :gutter="10">
           <el-form-item label="所属院系">
-            <el-select @change="getSelectDept()" style="width: 100%;" v-model="select1" placeholder="请选择所属院校">
+            <el-select @change="getSelectDept()" style="width: 100%;" v-model="tbClazz.tbCollege.coId"
+              placeholder="请选择所属院校">
               <el-option v-for="(item, index) in tbCollege" :key="index" :label="item.coName" :value="item.coId"></el-option>
             </el-select>
-            <el-select @change="getSelectSpecialty()" style="width: 100%;" v-model="select2" placeholder="请选择院系">
+            <el-select @change="getSelectSpecialty()" style="width: 100%;" v-model="tbClazz.tbDept.deId"
+              placeholder="请选择院系">
               <el-option v-for="(item, index) in tbDept" :key="index" :label="item.deName" :value="item.deId"></el-option>
             </el-select>
             <el-select style="width: 100%;" v-model="tbClazz.tbSpecialty.spId" placeholder="请选择院系">

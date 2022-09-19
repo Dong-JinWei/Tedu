@@ -220,7 +220,7 @@ export default {
         })
     },
     save () {
-      this.$refs['user'].validate((valid) => {
+      this.$refs['tbCollage'].validate((valid) => {
         if (valid) {
           this.$http.post('http://101.200.147.50/tbCollege/save', this.tbCollage)
             .then(response => {
